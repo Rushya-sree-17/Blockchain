@@ -2,6 +2,12 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var EmailRequest = require('../models/emailRequest');
+// var Judiciary = require('../models/judiciary');
+var randToken = require('rand-token');
+
+function passwordGen() {
+	return randToken.generate(10);
+}
 
 router.get('/', function (req, res, next) {
 	return res.render('index.ejs');
@@ -13,26 +19,18 @@ router.post('/', function(req, res, next) {
 	var personInfo = req.body;
 
 
-	if(!personInfo.email || !personInfo.firstName || !personInfo.lastName || !personInfo.password || !personInfo.passwordConf){
+	if(!personInfo.uniqueId || !personInfo.email || !personInfo.firstName || !personInfo.lastName || !personInfo.password || !personInfo.passwordConf){
 		res.send();
 	} else {
 		if (personInfo.password == personInfo.passwordConf) {
 
-			User.findOne({email:personInfo.email},function(err,data){
+			User.findOne({$or : [{uniqueId:personInfo.uniqueId},{email:personInfo.email}]},function(err,data){
 				if(!data){
 					var c;
 					User.findOne({},function(err,data){
 
-						if (data) {
-							console.log("if");
-							console.log(data);
-							c = data.unique_id + 1;
-						}else{
-							c=1;
-						}
-
 						var newPerson = new User({
-							unique_id:c,
+							uniqueId:personInfo.uniqueId,
 							email:personInfo.email,
 							firstName: personInfo.firstName,
 							lastName: personInfo.lastName,
@@ -48,10 +46,10 @@ router.post('/', function(req, res, next) {
 								console.log('Success');
 						});
 
-					}).sort({_id: -1}).limit(1);
+					})
 					res.send({"Success":"You are regestered,You can login now."});
 				}else{
-					res.send({"Success":"Email is already used."});
+					res.send({"Success":"ID/email is already in use"});
 				}
 
 			});
@@ -72,7 +70,7 @@ router.post('/login', function (req, res, next) {
 
 			if(data.password==req.body.password){
 				//console.log("Done Login");
-				req.session.userId = data.unique_id;
+				req.session.userId = data.uniqueId;
 				//console.log(req.session.userId);
 				res.send({"Success":"Success!","userType":data.userType});
 
@@ -101,7 +99,7 @@ router.post('/findMyEmail', function (req, res, next) {
 						if (data) {
 							console.log("if");
 							console.log(data);
-							c = data.unique_id + 1;
+							c = data.uniqueMailId + 1;
 						}else{
 							c=1;
 						}
@@ -109,13 +107,11 @@ router.post('/findMyEmail', function (req, res, next) {
 						// User.findOne()
 
 						var newEmailRequest = new EmailRequest({
-							unique_id : c,
-							user_id : req.session.userId,
-							// email: req.session,
-							// firstName: String,
-							// lastName : String,
+							uniqueMailId : c,
+							userId : req.session.userId,
 							messageId : emailReqInfo.messageId,
-							emailTimeStamp : emailReqInfo.emailTimeStamp
+							emailTimeStamp : emailReqInfo.emailTimeStamp,
+							judiciaryId : emailReqInfo.judiciaryId,
 						});
 
 						newEmailRequest.save(function(err,EmailReqData){
@@ -135,42 +131,147 @@ router.post('/findMyEmail', function (req, res, next) {
 	}
 });
 
+
+
+router.post('/addJudiciary', function (req, res, next) {
+	console.log(req.body);
+	var judiciaryDetails = req.body;
+
+
+	if(!judiciaryDetails.uniqueId || !judiciaryDetails.firstName || !judiciaryDetails.lastName || !judiciaryDetails.emailId ){
+		res.send();
+	} else {
+			User.findOne({uniqueId : judiciaryDetails.uniqueId },function(err,data){
+				if(!data){
+					var c;
+					var pass = passwordGen();
+
+						var newJudiciary = new User({
+						    uniqueId: judiciaryDetails.uniqueId,
+							email: judiciaryDetails.emailId,
+							firstName: judiciaryDetails.firstName,
+							lastName : judiciaryDetails.lastName,
+							userType : "Judiciary",
+							password : pass,
+							passwordConf : pass
+						});
+
+						newJudiciary.save(function(err,JudiciaryData){
+							if(err)
+								console.log(err);
+							else
+								console.log('Success');
+						});
+
+					res.send({"Success":"Judiciary Details added successfully."});
+				}else{
+					res.send({"Success":"Judiciary Id is already added."});
+				}
+
+			});
+	}
+});
+
+router.post('/removeJudiciary', function (req, res, next) {
+	console.log(req.body);
+	var judiciaryDetails = req.body;
+
+
+	if(!judiciaryDetails.uniqueId ){
+		res.send();
+	} else {
+			User.deleteOne({uniqueId : judiciaryDetails.uniqueId },function(err){
+				if(!err){
+					res.send({"Success":"Judiciary deleted Successfully."});
+				}else{
+					res.send({"Success":"Judiciary not found"});
+				}
+
+			});
+	}
+});
+
+router.get('/searchMail/:id',function(req,res,next){
+	EmailRequest.updateOne({"uniqueMailId" : req.params.id},{"status" : "Mail Sent to judiciary"},function(err){
+		if(err){
+			console.log(err);
+		}else{
+			console.log("Success");
+			res.redirect("/profile");
+		}
+	});
+});
+
+
 router.get('/profile', function (req, res, next) {
 	console.log("profile");
 	console.log(req.session);
-	User.findOne({unique_id:req.session.userId},function(err,data){
+	User.findOne({uniqueId:req.session.userId},function(err,data){
 		console.log("data");
 		console.log(data);
 		
 		if(!data){
 			res.redirect('/');
 		}else{
-			//console.log("found");
-
-				if(data.userType=="generalUser"){
-					EmailRequest.find({user_id:req.session.userId}, function(err, emailRequestData1){
-						return res.render('data.ejs', {"name":data.firstName,"email":data.email,"emailRequestData":emailRequestData1});
-					});
-				}
-				else if(data.userType == "admin"){
-					EmailRequest.find({}, function(err, emailRequestData1){
-						return res.render('adminData.ejs', {"name":data.firstName,"email":data.email,"emailRequestData":emailRequestData1});
-					});
-				}
-				
-
+			if(data.userType=="generalUser"){
+				EmailRequest.find({userId:req.session.userId}, function(err, emailRequestData1){
+					console.log(emailRequestData1);
+					return res.render('data.ejs', {"name":data.firstName,"email":data.email,"emailRequestData":emailRequestData1});
+				});
+			}
+			else if(data.userType == "admin"){
+				EmailRequest.find({}, function(err, emailRequestData1){
+					return res.render('adminData.ejs', {"name":data.firstName,"email":data.email,"emailRequestData":emailRequestData1});
+				});
+			}else if(data.userType == "Judiciary"){
+				// console.log("else");
+				EmailRequest.find({judiciaryId:req.session.userId}, function(err, emailRequestData1){
+					return res.render('judiciaryData.ejs', {"name":data.firstName,"email":data.email,"emailRequestData":emailRequestData1});
+				});
+			}	
 		}
 	});
 });
 
 router.get('/findMyEmail',function(req,res,next){
-	User.findOne({unique_id:req.session.userId},function(err,data){
+	User.findOne({uniqueId:req.session.userId},function(err,data){
 		console.log("data");
 		console.log(data);
 		if(!data){
 			res.redirect('/');
 		}else{
-			res.render('findMyEmail.ejs', {"name":data.firstName,"email":data.email});
+			User.find({userType:"Judiciary"},function(err,data){
+				if(!data){
+					res.render('findMyEmail.ejs');
+				}else{
+					res.render('findMyEmail.ejs',{"judiciaries" : data});
+				}
+			});
+			
+		}
+	});
+});
+
+router.get('/addJudiciary',function(req,res,next){
+	User.findOne({uniqueId:req.session.userId},function(err,data){
+		console.log("data");
+		console.log(data);
+		if(!data){
+			res.redirect('/');
+		}else{
+			res.render('addJudiciary.ejs');
+		}
+	});
+});
+
+router.get('/removeJudiciary',function(req,res,next){
+	User.findOne({uniqueId:req.session.userId},function(err,data){
+		console.log("data");
+		console.log(data);
+		if(!data){
+			res.redirect('/');
+		}else{
+			res.render('removeJudiciary.ejs');
 		}
 	});
 });
@@ -220,6 +321,17 @@ router.post('/forgetpass', function (req, res, next) {
 	});
 
 });
+
+router.post('/profile',function(req,res,next){
+	console.log(req.body);
+	var uniqueMailId = req.body.uniqueMailId;
+	console.log("hi");
+	console.log(uniqueMailId);
+	console.log("hi2");
+	res.send();
+});
+
+
 
 module.exports = router;
 

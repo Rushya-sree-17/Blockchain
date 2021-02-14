@@ -2,16 +2,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 emailRequestSchema = new Schema( {
-    unique_id: Number,
-    user_id : Number,
-	// email: String,
-	// firstName: String,
-    // lastName : String,
+    uniqueMailId: Number,
+    userId : Number,
     messageId : String,
     emailTimeStamp : String,
-    judiciaryDetails : String,
+    judiciaryId : String,
     currTimeStamp : { type: Date, default: Date.now},
-    status : { type: Boolean,default:false}
+    status : { type: String,default:"Pending"}
 }),
 EmailRequest = mongoose.model('EmailRequest', emailRequestSchema);
 

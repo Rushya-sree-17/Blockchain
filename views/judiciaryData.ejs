@@ -25,9 +25,9 @@
 					<tr><td>Email </td><td><%= email %></td></tr>
 				</table>
 			</center>
-			<div class="findMyEmail">
+			<!-- <div class="findMyEmail">
 				<a href="/findMyEmail"><h4>Find my email</h4></a>
-			</div>
+			</div> -->
 			<div>
 				<p>Email Requests</p>
 			</div>
@@ -44,6 +44,7 @@
 			<tr>
 				<th><center>S.No</center></th>
 				<th><center>Message Id</center></th>
+				<th><center>User Id</center></th>
 				<th><center>Email Time Stamp</center></th>
 				<th><center>Judiciary</center></th>
 				<th><center>Request Time</center></th>
@@ -53,6 +54,7 @@
 				<tr>
 					<td><%= i+1 %></td>
 					<td><%= emailRequestData[i].messageId %></td>
+					<td><%= emailRequestData[i].userId %></td>
 					<td><%= emailRequestData[i].emailTimeStamp %></td>
 					<td><%= emailRequestData[i].judiciaryId %></td>
 					<td><%= emailRequestData[i].currTimeStamp %></td>
