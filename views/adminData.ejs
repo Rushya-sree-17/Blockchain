@@ -11,36 +11,66 @@
 
 
   <script type="text/javascript">
+  var x ;
+	$( "#form" ).submit(function(event){
+		event.preventDefault();
+		print(x);
+		$.ajax({
+			type: 'POST',
+			url: '/profile',
+			data: {"uniqueMailId" : x},
+			dataType: "json",
+			success: function(response){
+				//alert("a");
+				//console.log(response.Success);
+				$('#form')[0].reset();
+				
+				document.getElementById("check").innerHTML=response.Success;
+					// ADD THIS CODE
+					setTimeout(function(){
+						document.getElementById("check").innerHTML="";
+					},3000);
+					if (response.Success=="Success!") {
+							// if(response.userType == "generalUser")
+							// 	document.getElementById("generalUserType").click();
+							// else if(response.userType == "admin")
+							// 	document.getElementById("adminType").click();
+					};
+			},
+				error: function() {
+					
+				}
+			});
+	});
+
+
       function show() {
-              var rowId = event.target.parentNode.parentNode.id;
-              //this gives id of tr whose button was clicked
-              console.log(rowId);
-
-              // var table = document.getElementById("email");
-              // var temp = table.rows[rowId].cells[5];
-              // document.getElementById("email").rows[rowId].cells[4].style.display = "hidden";
-              // temp.style.display = "hidden";
-
-              var data = document.getElementById(rowId);
+			  var rowId = event.target.parentNode.parentNode.id;
+			  var data = document.getElementById(rowId);
               var row_data = data.getElementsByTagName('td');
-              // var rowSelected = table.getElementsByTagName('td')[rowId];
-              var unique_id = row_data[1].innerHTML;
-              var messageId = row_data[2].innerHTML;
-              var timeStamp = row_data[3].innerHTML;
+			  console.log(rowId);
+			  var unique_id = row_data[1].innerHTML;
+			  console.log(unique_id);
+			  x = unique_id;
+			  $("#uniqueMailId").value = "hi";
+			  $("#form").submit();
 
-              console.log("........");
-              console.log(unique_id);
-              console.log(messageId);
-              console.log(timeStamp);
-							console.log("........");
+            //   var data = document.getElementById(rowId);
+            //   var row_data = data.getElementsByTagName('td');
+            //   // var rowSelected = table.getElementsByTagName('td')[rowId];
+            //   var unique_id = row_data[1].innerHTML;
+            //   var messageId = row_data[2].innerHTML;
+            //   var timeStamp = row_data[3].innerHTML;
 
-              var x = document.getElementById("waiting"+rowId);
-							console.log(x);
-              x.style.display = "block";
+            //   console.log(unique_id);
+    
+            //   var x = document.getElementById("waiting"+rowId);
+			// 	console.log(x);
+            //   x.style.display = "block";
 
-              var y = document.getElementById("submitButton"+rowId);
-							console.log(x);
-              y.style.display = "hidden";
+            //   var y = document.getElementById("submitButton"+rowId);
+			// 	console.log(x);
+            //   y.style.display = "hidden";
             }
 	</script>
 
@@ -62,10 +92,17 @@
 					<tr><td>Email </td><td><%= email %></td></tr>
 				</table>
 			</center>
+			<div class="col-md-4 col-md-offset-4">
+				<a href="/addJudiciary"><h4>Add Judiciary</h4></a></br>
+			</div>
+
+			<div class="col-md-4 col-md-offset-4">
+				<a href="/removeJudiciary"><h4>Remove Judiciary</h4></a></br>
+			</div>
 			<!-- <div class="findMyEmail">
 				<a href="/findMyEmail"><h4>Find my email</h4></a>
 			</div> -->
-			<div>
+			<div class="col-md-4 col-md-offset-4">
 				<p>Email Requests</p>
 			</div>
 		</div>
@@ -77,7 +114,8 @@
 		<table id = "email" class="table table-hover text-center" >
 			<thead>
   				<th><center>S.No</center></th>
-          <th><center>Transaction Id</center></th>
+				<th><center>Unique Mail Id</center></th>
+				<th><center>User Id</center></th>
   				<th><center>Message Id</center></th>
   				<th><center>Email Time Stamp</center></th>
   				<th><center>Request Time</center></th>
@@ -85,32 +123,37 @@
 			</thead>
       <tbody>
           <% for(var i=0; i < emailRequestData.length; i++) { %>
-    				<tr id= <%= i+1 %> >
-    					<td><%= i+1 %></td>
-              <td class="row-data"><%= emailRequestData[i].unique_id %></td>
-    					<td class="row-data"><%= emailRequestData[i].messageId %></td>
-    					<td class="row-data"><%= emailRequestData[i].emailTimeStamp %></td>
-    					<td class="row-data"><%= emailRequestData[i].currTimeStamp %></td>
-    					<!-- <% if(emailRequestData[i].status==false) { %>
-    					<td>Pending</td>
-    					<% } else { %>
-    					<td>Closed</td>
-    					<% } %> -->
-
-    					<td>
-    					    <input id="submitButton<%= i+1 %>" type="button" value="search" onclick="show()" />
-                  <i id="waiting<%= i+1 %>" hidden>waiting for judiciary details...</i>
-              </td>
-
-    					<!-- <td><%= emailRequestData[i].currTimeStamp %></td> -->
-    				</tr>
-    			<% } %>
+    		<tr id= <%= i+1 %> >
+    		<td><%= i+1 %></td>
+			<td class="row-data"><%= emailRequestData[i].uniqueMailId %></td>
+			<td class="row-data"><%= emailRequestData[i].userId %></td>
+			<td class="row-data"><%= emailRequestData[i].messageId %></td>
+			<td class="row-data"><%= emailRequestData[i].emailTimeStamp %></td>
+			<td class="row-data"><%= emailRequestData[i].currTimeStamp %></td>
+    		<td>
+			<% if(emailRequestData[i].status==="Pending"){ %>
+			<a href="/searchMail/<%= emailRequestData[i].uniqueMailId %>">Search</a>
+			<%} else{ %>
+			<%= emailRequestData[i].status %>
+			<% } %>
+    		<i id="waiting<%= i+1 %>" hidden>waiting for judiciary details...</i>
+            </td>
+    		</tr>
+			<% } %>
+				
+				
       </tbody>
 
-			</table>
+	</table>
+	<form id="form" method="post" >
+		<input id="uniqueMailId" type="text" name="uniqueMailId" placeholder="" class="form-control"><br/>
+		<input type="submit" value="search" class="btn btn-success">
+	</form>
+			
 		</center>
 		<!-- <span><%= emailRequestData %></span> -->
 	</div>
+	<p id="check"></p>
 </div>
 
 </body>
