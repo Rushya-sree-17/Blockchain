@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Our Project | Todo List</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="./css/main.css">
+
+    <style>
+      
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" target="_blank">Our University | Todo List</a>
+        <ul class="navbar-nav px-3">
+          <li class="nav-item text-nowrap d-none d-sm-none d-sm-block">
+            <small><a class="nav-link" href="#"><span id="account">Hi</span></a></small>
+          </li>
+        </ul>
+      </nav>
+    <div class="col-md-4 col-md-offset-4">
+        
+        <div>
+            <p>Add Email</p>
+        </div>
+       
+        <div class="form-group">
+            <form id="form" onsubmit="createTransaction();return false;" >
+                <input id="content" type="text" name="content" placeholder="Content" required="" class="form-control"><br/>
+                <input id="messageId" type="text" name="messageId" placeholder="Message-Id" required="" class="form-control"><br/>
+                <input id="timeStamp" type="text" name="timeStamp" placeholder="Time-Stamp" required="" class="form-control"><br/>
+                <input id="emailId" type="text" name="emailId" placeholder="Email-Id" required="" class="form-control"><br/>
+                <input  type="submit" value="Submit" class="btn btn-success">
+            </form>
+
+            <!-- <label for="name" class="col-lg-2 control-label">Instructor Name</label>
+            <input id="content" type="text">
+    
+            <label for="name" class="col-lg-2 control-label">Instructor Age</label>
+            <input id="messageId" type="text">
+
+            <label for="name" class="col-lg-2 control-label">Instructor Name</label>
+            <input id="timeStamp" type="text">
+
+            <label for="name" class="col-lg-2 control-label">Instructor Name</label>
+            <input id="emailId" type="text">
+    
+            <button id="button">Submit</button>   -->
+
+        </div>
+        <div>
+          <ul id="taskList" class="list-unstyled">
+            <div class="taskTemplate" class="checkbox" style="display: none">
+              <label>
+                <input type="checkbox" />
+                <span class="content">Task content goes here...</span>
+              </label>
+            </div>
+          </ul>
+          <ul id="completedTaskList" class="list-unstyled">
+          </ul>
+        </div>
+        <div class="mssg bg-danger">
+            <span id="check" ></span>
+        </div>
+        <div id="LangTable">
+            <a href="/profile" id="generalUserType"></a>
+            <a href="/profile" id="adminType"></a>
+            <a href="/profile" id="judiciaryType"></a>
+        </div>
+        
+        <!-- <div><span>Forgot password?</span><a href="/forgetpass">Click here</a>
+        <div><span>Create a new Account?</span><a href="/">Register here</a> -->
+    
+        </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script> -->
+    
+    <script src="/scripts/web3/dist/web3.min.js"></script>
+    <script src="/scripts/truffle-contract/dist/truffle-contract.js"></script>
+    <!-- <script src="app.js"></script> -->
+    <script src= "./app.js"></script>
+    
+  </body>
+</html>
+
