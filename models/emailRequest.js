@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 emailRequestSchema = new Schema( {
     uniqueMailId: Number,
-    userId : Number,
+    userId : String,
     messageId : String,
     emailTimeStamp : String,
     judiciaryId : String,

@@ -214,9 +214,18 @@ router.get('/profile', function (req, res, next) {
 			res.redirect('/');
 		}else{
 			if(data.userType=="generalUser"){
+				console.log("hii");
+				
 				EmailRequest.find({userId:req.session.userId}, function(err, emailRequestData1){
+					if(err)
+					{
+						
+						console.log(err);
+					}
+					else{ 
 					console.log(emailRequestData1);
 					return res.render('data.ejs', {"name":data.firstName,"email":data.email,"emailRequestData":emailRequestData1});
+					}
 				});
 			}
 			else if(data.userType == "admin"){
@@ -251,6 +260,28 @@ router.get('/findMyEmail',function(req,res,next){
 		}
 	});
 });
+
+
+
+router.get('/decryptPage',function(req,res,next){
+	User.findOne({uniqueId:req.session.userId},function(err,data){
+		console.log("data");
+		console.log(data);
+		if(!data){
+			res.redirect('/');
+		}else{
+			User.find({userType:"Judiciary"},function(err,data){
+				if(!data){
+					res.render('decryptPage.ejs');
+				}else{
+					res.render('decryptPage.ejs',{"judiciaries" : data});
+				}
+			});
+			
+		}
+	});
+});
+
 
 router.get('/addJudiciary',function(req,res,next){
 	User.findOne({uniqueId:req.session.userId},function(err,data){
@@ -329,6 +360,10 @@ router.post('/profile',function(req,res,next){
 	console.log(uniqueMailId);
 	console.log("hi2");
 	res.send();
+});
+
+router.get('/addEmail',function(req,res,next){
+	return res.render("addEmail.ejs");
 });
 
 

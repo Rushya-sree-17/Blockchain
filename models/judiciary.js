@@ -5,7 +5,7 @@ var randToken = require('rand-token');
 
 
 judiciarySchema = new Schema( {
-	judiciary_id: Number,
+	judiciary_id: String,
 	email: String,
 	firstName : String,
 	lastName : String,

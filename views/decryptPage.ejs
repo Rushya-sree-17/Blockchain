@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Find My Email</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+	</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="./css/main.css">
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			$( "#form" ).submit(function(event) {
+				event.preventDefault();
+
+				$.ajax({
+					type: 'POST',
+					url: '/findMyEmail',
+					data: $('#form').serialize(),
+					dataType: "json",
+					success: function(response){
+						//alert("a");
+						//console.log(response.Success);
+						$('#form')[0].reset();
+
+						document.getElementById("check").innerHTML=response.Success;
+							 //ADD THIS CODE
+						// alert(response.Success);
+						setTimeout(function(){
+							document.getElementById("check").innerHTML="";
+						},3000);
+						// if (response.Success=="Success!") {
+						// 	 if(response.userType == "generalUser")
+						// 		 document.getElementById("generalUserType").click();
+						// 	 else if(response.userType == "admin")
+						// 	 	 document.getElementById("adminType").click();
+						// };
+         			},
+         				error: function() {
+						 
+						}
+         			})
+			});
+
+		});
+	</script>
+</head>
+<body>
+	<div class="col-md-4 col-md-offset-4">
+		<div>
+			<p>Decrypt the Email</p>
+		</div>
+		<div class="form-group">
+			<form id="form" method="post" >
+				<input type="text" name="privateKeyOfUser" placeholder="Private Key Of User" required="" class="form-control"><br/>
+				<!-- <input type="text" name="emailTimeStamp" placeholder="Email Time-Stamp" required="" class="form-control"><br/> -->
+				<!-- <label for="level">Select Judiciary : </label> -->
+				<!-- <select class="form-control" name="judiciaryId" id="judiciaryIds"> -->
+					<!-- <% judiciaries.forEach(function(judiciary){ %> -->
+					<!-- <option class="judiciaryId" value= <%= judiciary.uniqueId %>> <%= judiciary.uniqueId %></option> -->
+					<!-- <% }); %> -->
+				<!-- </select> -->
+				<!-- <br> -->
+				<!-- <br> -->
+				<input type="submit" value="Submit" class="btn btn-success">
+			</form>
+			
+			
+		</div>
+		<div class="mssg bg-danger">
+			<span id="check" ></span>
+		</div>
+		<div id="LangTable">
+			<!-- <a href="/profile" id="generalUserType"></a> -->
+			<!-- <a href="/profile" id="adminType"></a> -->
+		</div>
+	
+		
+		<!-- <div><span>Do you forgot password?</span><a href="/forgetpass">Click here</a> -->
+		<div><a href="/profile">Back</a> 
+		<div><a href="/logout">Logout</a>
+
+		</div>
+		
+	</div>
+</body>
+</html>
