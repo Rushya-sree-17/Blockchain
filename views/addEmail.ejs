@@ -22,8 +22,6 @@
 
 <h1>Add Email</h1>
 
-<!-- <h2 id="instructor"></h2> -->
-
 <label for="name" class="col-lg-2 control-label">Content</label>
  <input id="content" type="text">
 
@@ -44,10 +42,15 @@
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-
-
+<script src="ipfs.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+</script>
 
 <script>
+
+// const IPFS = require('ipfs-api');
+// const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
+
 
  // future code goes here
  if (typeof web3 !== "undefined")
@@ -72,7 +75,25 @@ var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) 
 //  // var Courses = CoursesContract.at('0xd9145CCE52D386f254917e481eB44e9943F39138');
 
  $("#button").click(function() {
+var jsonTemp = {"content":$('#content').val()};
+   //----------------------------------------post
+console.log(($('#content').val())+"-----------------------");
+   				$.ajax({
+   					type: 'POST',
+   					url: '/addEmail',
+   					data: jsonTemp,
+   					dataType: "json",
+   					success: function(response){
+        			if (response.Success=="done")
+              {
+                console.log("posted");
+        			};
+            },
+            				error: function() {
 
+   						}
+            			})
+//----------------------------------------------------
       console.log("account0:");
 
    console.log(web3.eth.accounts);

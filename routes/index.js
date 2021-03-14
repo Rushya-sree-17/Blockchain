@@ -2,8 +2,23 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var EmailRequest = require('../models/emailRequest');
+
+const ipfsClient = require('ipfs-http-client');
+const ipfs = ipfsClient({host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
+// const ipfs = ipfsClient('http://localhost:5001');
+// const IPFS = require('ipfs-api');
+// const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
+
 // var Judiciary = require('../models/judiciary');
 var randToken = require('rand-token');
+
+const addContent =  ({path, content}) => {
+	const fileContent = {path: path, content: content};
+	const  fileAdded =  ipfs.add(fileContent);
+	console.log(fileContent);
+	console.log(fileAdded[0].hash);
+	return fileAdded[0].hash;
+}
 
 function passwordGen() {
 	return randToken.generate(10);
@@ -13,6 +28,9 @@ router.get('/', function (req, res, next) {
 	return res.render('index.ejs');
 });
 
+router.get('/app', function (req, res, next) {
+	return res.render('App.js');
+});
 
 router.post('/', function(req, res, next) {
 	console.log(req.body);
@@ -267,8 +285,17 @@ router.get('/profile', function (req, res, next) {
 	});
 });
 
+router.post('/addEmail', function(req,res,next) {
+	const data = req.body.content;
+	console.log("-----------------------" + data);
+	// const fileHash = addContent(data);
+ipfs.add(data);
+	res.send({"Success":"done"});
+
+});
 
 router.get('/addEmail',function(req,res,next){
+
 	User.findOne({uniqueId:req.session.userId},function(err,data){
 		console.log("data");
 		console.log(data);
