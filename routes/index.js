@@ -3,8 +3,11 @@ var router = express.Router();
 var User = require('../models/user');
 var EmailRequest = require('../models/emailRequest');
 
-const ipfsClient = require('ipfs-http-client');
-const ipfs = ipfsClient({host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
+// const ipfsClient = require('ipfs-http-client');
+const ipfsAPI = require('ipfs-api');
+// const ipfs = ipfsClient({host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
+const ipfs = ipfsAPI('ipfs.infura.io', '5001', {protocol: 'https'})
+
 // const ipfs = ipfsClient('http://localhost:5001');
 // const IPFS = require('ipfs-api');
 // const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
@@ -285,11 +288,31 @@ router.get('/profile', function (req, res, next) {
 	});
 });
 
-router.post('/addEmail', function(req,res,next) {
+
+router.post('/addEmail', async function(req,res,next) {
 	const data = req.body.content;
 	console.log("-----------------------" + data);
 	// const fileHash = addContent(data);
-ipfs.add(data);
+
+	let testBuffer = new Buffer(data);
+
+	ipfs.files.add(testBuffer, function (err, file) {
+	        if (err) {
+	          console.log(err);
+	        }
+	        console.log(file);
+					console.log(file);
+	      })
+
+	ipfs.files.get('QmRg18TJxxeqETYsxMZZDARPQULKVjQUpxuGv1NKgTPCK6', function (err, files) {
+        files.forEach((file) => {
+					console.log("hiiiiiiiiiiii"+file.content.toString('utf8'))
+          console.log(file.path)
+          console.log(file.content.toString('utf8'))
+        })
+      })
+
+
 	res.send({"Success":"done"});
 
 });

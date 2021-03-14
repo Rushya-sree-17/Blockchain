@@ -31,10 +31,12 @@
  <label for="name" class="col-lg-2 control-label">TimeStamp</label>
   <input id="timeStamp" type="text">
 
-  <!-- <label for="name" class="col-lg-2 control-label">Email Id</label> -->
-   <input id="userEmailId" type="text" value = <%=data.email %> hidden >
-<!-- <p id="userEmailId" value= "<%=data.email %>" ><%=data.email %></p> -->
+  <!-- <p><input type="file"  accept="image/*" name="image" id="file"   style="display: none;"></p>
+  <p><label for="file" style="cursor: pointer;">Upload Image</label></p>
+  <p><img id="output" width="200" /></p> -->
 
+
+   <input id="userEmailId" type="text" value = <%=data.email %> hidden >
 <button id="button" >Update  </button>
 
 
@@ -42,7 +44,7 @@
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="ipfs.js"></script>
+<!-- <script src="ipfs.js"></script> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
 </script>
 
@@ -75,6 +77,11 @@ var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) 
 //  // var Courses = CoursesContract.at('0xd9145CCE52D386f254917e481eB44e9943F39138');
 
  $("#button").click(function() {
+   // console.log($('#file').files[0]);
+
+  // var image = document.getElementById('output');
+  // image.src = URL.createObjectURL(document.getElementById('file').files[0]);
+
 var jsonTemp = {"content":$('#content').val()};
    //----------------------------------------post
 console.log(($('#content').val())+"-----------------------");
@@ -102,11 +109,11 @@ console.log(($('#content').val())+"-----------------------");
    var accounts = web3.eth.getAccounts((error,result) => {
           if (error)
           {
-            console.log(error);
+            console.log("$$$$$$$$$$$$"+error);
           }
           else
           {
-            console.log(result[0]);
+            console.log(result + "--------------");
             console.log($("#userEmailId").innerHTML);
 //----------------------------------------------------------------------------------------------------------------------------------
 //searching for duplicates of Mail
@@ -214,7 +221,6 @@ var accounts = web3.eth.getAccounts((error,result) => {
 document.getElementById("content").value = "";
 document.getElementById("messageId").value = "";
 document.getElementById("timeStamp").value = "";
-
  </script>
 
 </body>
