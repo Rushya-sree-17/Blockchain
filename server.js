@@ -8,11 +8,13 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 
-var db_link = "mongodb://localhost:27017/chatAppDB";
 
+//----------------------------------------
+// var db_link = "mongodb://localhost:27017/chatAppDB";
+var db_link = "mongodb+srv://user1:user1@cluster0.xkioe.mongodb.net/Project-0?retryWrites=true&w=majority";
 mongoose.connect(db_link, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: false
 }, (err) => {
   if (!err) {
     console.log('MongoDB Connection Succeeded.');

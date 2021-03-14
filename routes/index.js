@@ -2,8 +2,23 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var EmailRequest = require('../models/emailRequest');
+
+const ipfsClient = require('ipfs-http-client');
+const ipfs = ipfsClient({host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
+// const ipfs = ipfsClient('http://localhost:5001');
+// const IPFS = require('ipfs-api');
+// const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
+
 // var Judiciary = require('../models/judiciary');
 var randToken = require('rand-token');
+
+const addContent =  ({path, content}) => {
+	const fileContent = {path: path, content: content};
+	const  fileAdded =  ipfs.add(fileContent);
+	console.log(fileContent);
+	console.log(fileAdded[0].hash);
+	return fileAdded[0].hash;
+}
 
 function passwordGen() {
 	return randToken.generate(10);
@@ -13,6 +28,9 @@ router.get('/', function (req, res, next) {
 	return res.render('index.ejs');
 });
 
+router.get('/app', function (req, res, next) {
+	return res.render('App.js');
+});
 
 router.post('/', function(req, res, next) {
 	console.log(req.body);
@@ -82,6 +100,30 @@ router.post('/login', function (req, res, next) {
 		}
 	});
 });
+
+
+router.post('/adminData', function (req, res, next) {
+	console.log("req body");
+	console.log(req.body);
+	var emailUniqueId = req.body.uniqueMailId;
+	var content = req.body.emailContent;
+	var statusToBeUpdated = "Mail Sent to judiciary";
+console.log(emailUniqueId);
+if(content === "Invalid request")
+{
+	statusToBeUpdated = "Invalid request";
+}
+EmailRequest.updateOne({"uniqueMailId" : emailUniqueId},{"status" : statusToBeUpdated,"content":content},function(err){
+	if(err){
+		console.log(err);
+	}else{
+		console.log("Success");
+	}
+});
+
+});
+
+
 
 router.post('/findMyEmail', function (req, res, next) {
 	console.log(req.body);
@@ -194,10 +236,11 @@ router.post('/removeJudiciary', function (req, res, next) {
 router.get('/searchMail/:id',function(req,res,next){
 	EmailRequest.updateOne({"uniqueMailId" : req.params.id},{"status" : "Mail Sent to judiciary"},function(err){
 		if(err){
+
 			console.log(err);
 		}else{
 			console.log("Success");
-			res.redirect("/profile");
+			// res.redirect("/profile");
 		}
 	});
 });
@@ -209,20 +252,20 @@ router.get('/profile', function (req, res, next) {
 	User.findOne({uniqueId:req.session.userId},function(err,data){
 		console.log("data");
 		console.log(data);
-		
+
 		if(!data){
 			res.redirect('/');
 		}else{
 			if(data.userType=="generalUser"){
 				console.log("hii");
-				
+
 				EmailRequest.find({userId:req.session.userId}, function(err, emailRequestData1){
 					if(err)
 					{
-						
+
 						console.log(err);
 					}
-					else{ 
+					else{
 					console.log(emailRequestData1);
 					return res.render('data.ejs', {"name":data.firstName,"email":data.email,"emailRequestData":emailRequestData1});
 					}
@@ -237,10 +280,35 @@ router.get('/profile', function (req, res, next) {
 				EmailRequest.find({judiciaryId:req.session.userId}, function(err, emailRequestData1){
 					return res.render('judiciaryData.ejs', {"name":data.firstName,"email":data.email,"emailRequestData":emailRequestData1});
 				});
-			}	
+			}
 		}
 	});
 });
+
+router.post('/addEmail', function(req,res,next) {
+	const data = req.body.content;
+	console.log("-----------------------" + data);
+	// const fileHash = addContent(data);
+ipfs.add(data);
+	res.send({"Success":"done"});
+
+});
+
+router.get('/addEmail',function(req,res,next){
+
+	User.findOne({uniqueId:req.session.userId},function(err,data){
+		console.log("data");
+		console.log(data);
+		if(!data){
+			res.redirect('/');
+		}else{
+
+			res.render('addEmail.ejs', {"data" : data});
+
+		}
+	});
+});
+
 
 router.get('/findMyEmail',function(req,res,next){
 	User.findOne({uniqueId:req.session.userId},function(err,data){
@@ -256,7 +324,7 @@ router.get('/findMyEmail',function(req,res,next){
 					res.render('findMyEmail.ejs',{"judiciaries" : data});
 				}
 			});
-			
+
 		}
 	});
 });
@@ -277,7 +345,7 @@ router.get('/decryptPage',function(req,res,next){
 					res.render('decryptPage.ejs',{"judiciaries" : data});
 				}
 			});
-			
+
 		}
 	});
 });
@@ -362,9 +430,6 @@ router.post('/profile',function(req,res,next){
 	res.send();
 });
 
-router.get('/addEmail',function(req,res,next){
-	return res.render("addEmail.ejs");
-});
 
 
 
@@ -382,7 +447,7 @@ module.exports = router;
 //  user -> pending -> mail not found
 
 
-// Search -> 
+// Search ->
 // 1) admin -> Search -> waiting for judiciary details
-// 2) message Req -> user -> status -> Enter judiciary details 
+// 2) message Req -> user -> status -> Enter judiciary details
 //  after submitting judiciary details by user -> admin -> judiciary details

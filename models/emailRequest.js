@@ -8,6 +8,7 @@ emailRequestSchema = new Schema( {
     emailTimeStamp : String,
     judiciaryId : String,
     currTimeStamp : { type: Date, default: Date.now},
+    content :{type : String, default: ""},
     status : { type: String,default:"Pending"}
 }),
 EmailRequest = mongoose.model('EmailRequest', emailRequestSchema);

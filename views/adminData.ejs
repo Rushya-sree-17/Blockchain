@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Welcome</title>
+	<title>admin</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
 	</script>
@@ -9,69 +9,115 @@
   <link rel="stylesheet" href="./css/main.css">
 
 
-
+<script src="web3.min.js"></script>
   <script type="text/javascript">
+	// console.log(test);
   var x ;
-	$( "#form" ).submit(function(event){
-		event.preventDefault();
-		print(x);
-		$.ajax({
-			type: 'POST',
-			url: '/profile',
-			data: {"uniqueMailId" : x},
-			dataType: "json",
-			success: function(response){
-				//alert("a");
-				//console.log(response.Success);
-				$('#form')[0].reset();
-				
-				document.getElementById("check").innerHTML=response.Success;
-					// ADD THIS CODE
-					setTimeout(function(){
-						document.getElementById("check").innerHTML="";
-					},3000);
-					if (response.Success=="Success!") {
-							// if(response.userType == "generalUser")
-							// 	document.getElementById("generalUserType").click();
-							// else if(response.userType == "admin")
-							// 	document.getElementById("adminType").click();
-					};
-			},
-				error: function() {
-					
-				}
-			});
-	});
 
+ if (typeof web3 !== "undefined")
+ {
+		web3 = new Web3(web3.currentProvider);
+ }
+ else
+ {
+	// set the provider you want from Web3.providers
+		web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+ }
 
-      function show() {
+	var request = new XMLHttpRequest();
+	request.open("GET", "contracts.txt", false);
+	request.send(null);
+	var contractDetails = JSON.parse(request.responseText);
+
+var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) );
+
+ function show() {
+
 			  var rowId = event.target.parentNode.parentNode.id;
 			  var data = document.getElementById(rowId);
-              var row_data = data.getElementsByTagName('td');
+        var row_data = data.getElementsByTagName('td');
+
 			  console.log(rowId);
 			  var unique_id = row_data[1].innerHTML;
-			  console.log(unique_id);
 			  x = unique_id;
-			  $("#uniqueMailId").value = "hi";
-			  $("#form").submit();
+			  // $("#uniqueMailId").value = "hi";
+			  // $("#form").submit();
 
-            //   var data = document.getElementById(rowId);
-            //   var row_data = data.getElementsByTagName('td');
-            //   // var rowSelected = table.getElementsByTagName('td')[rowId];
-            //   var unique_id = row_data[1].innerHTML;
-            //   var messageId = row_data[2].innerHTML;
-            //   var timeStamp = row_data[3].innerHTML;
+				var msgId = row_data[3].innerHTML;
+				var timeStamp = row_data[4].innerHTML;
+				var unique_mail_id = row_data[1].innerHTML;
 
-            //   console.log(unique_id);
-    
-            //   var x = document.getElementById("waiting"+rowId);
-			// 	console.log(x);
-            //   x.style.display = "block";
+				console.log("Searching for msg id = " + msgId + " timeStamp = " + timeStamp);
 
-            //   var y = document.getElementById("submitButton"+rowId);
-			// 	console.log(x);
-            //   y.style.display = "hidden";
-            }
+				var accounts = web3.eth.getAccounts((error,result) => {
+				       if (error)
+				       {
+				         console.log(error);
+				       }
+				       else
+				       {
+								 var transCount = web3.eth.getTransactionCount(result[0], async function(err, counts){
+									 if(!err)
+									 {
+										 var flag = 0;
+										 for( var i = 1; i<counts; i++)
+										 {
+											 // console.log(i + " " + flag);
+
+							         Courses.methods.getTransaction(i)
+							         .call({from: result[0]},
+							           async function(error, emailTransaction)
+							           {
+							               if(!error)
+							               {
+															 if(emailTransaction[1] === msgId && emailTransaction[2] === timeStamp)
+															 {
+																 console.log(emailTransaction);
+																 		flag = 1;
+																		// console.log("flag " + flag);
+																		content = emailTransaction[0];
+																		// break;
+																		if(i === counts )
+																		{
+																				if(flag === 0)
+								 											 	{content = "Invalid request";}
+																				console.log("Email transaction found with content : " + content);
+
+																				$.post("/adminData",
+																					 {
+																						 uniqueMailId : unique_mail_id,
+																						 emailContent: content
+																					 },
+																					 function(data, status)
+																					 {
+																						 if(status === "success")
+																						 {
+																							 location.reload();
+																						 }
+																						 else
+																						 {alert("Status: " + status );}
+																					 }
+																			 );
+
+																		}
+															 }
+							               }
+							               else
+														 {console.log(error);}
+							           });//get method
+												 console.log(i + " - " + flag);
+										 }
+
+
+										// } //else
+									 }
+									 else
+									 	{console.log(err);}
+								 });
+
+				       }
+				});
+		}
 	</script>
 
 </head>
@@ -106,6 +152,9 @@
 				</a>
 			</br><br><br>
 			</div>
+			<div class="mssg bg-danger">
+				<span id="check" ></span>
+			</div>
 
 			<!-- <div class="findMyEmail">
 				<a href="/findMyEmail"><h4>Find my email</h4></a>
@@ -139,27 +188,24 @@
 			<td class="row-data"><%= emailRequestData[i].emailTimeStamp %></td>
 			<td class="row-data"><%= emailRequestData[i].currTimeStamp %></td>
     		<td>
-			<% if(emailRequestData[i].status==="Pending"){ %>
-			<a href="/searchMail/<%= emailRequestData[i].uniqueMailId %>">Search</a>
+			<% if(emailRequestData[i].status==="Pending") { %>
+				<button id = "button<%= i+1 %>" onclick="show()">Search</button>
+				<!-- <input type="button"  value="submit" onclick="show()" /></td> -->
+			<!-- <a href="/searchMail/<%= emailRequestData[i].uniqueMailId %>">Search</a> -->
 			<%} else{ %>
-			<%= emailRequestData[i].status %>
+				<h5><%= emailRequestData[i].status %></h5>
 			<% } %>
-    		<i id="waiting<%= i+1 %>" hidden>waiting for judiciary details...</i>
+    		<i id="waiting<%= i+1 %>" hidden>search initiated.....</i>
             </td>
     		</tr>
 			<% } %>
-				
-				
+
+
       </tbody>
 
 	</table>
-	<!-- <form id="form" method="post" >
-		<input id="uniqueMailId" type="text" name="uniqueMailId" placeholder="" class="form-control"><br/>
-		<input type="submit" value="search" class="btn btn-success">
-	</form> -->
-			
+
 		</center>
-		<!-- <span><%= emailRequestData %></span> -->
 	</div>
 	<p id="check"></p>
 </div>

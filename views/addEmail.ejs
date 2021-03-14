@@ -1,98 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Our Project | Todo List</title>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<head>
+ <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <!-- <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-    <link rel="stylesheet" href="./css/main.css">
+<title>Document</title>
 
-    <style>
-      
-    </style>
-  </head>
-  <body>
-    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" target="_blank">Our University | Todo List</a>
-        <ul class="navbar-nav px-3">
-          <li class="nav-item text-nowrap d-none d-sm-none d-sm-block">
-            <small><a class="nav-link" href="#"><span id="account">Hi</span></a></small>
-          </li>
-        </ul>
-      </nav>
-    <div class="col-md-4 col-md-offset-4">
-        
-        <div>
-            <p>Add Email</p>
-        </div>
-       
-        <div class="form-group">
-            <form id="form" onsubmit="createTransaction();return false;" >
-                <input id="content" type="text" name="content" placeholder="Content" required="" class="form-control"><br/>
-                <input id="messageId" type="text" name="messageId" placeholder="Message-Id" required="" class="form-control"><br/>
-                <input id="timeStamp" type="text" name="timeStamp" placeholder="Time-Stamp" required="" class="form-control"><br/>
-                <input id="emailId" type="text" name="emailId" placeholder="Email-Id" required="" class="form-control"><br/>
-                <input  type="submit" value="Submit" class="btn btn-success">
-            </form>
+<link rel="stylesheet" type="text/css" href="./css/main.css">
+<script src="web3.min.js"></script>
+</head>
 
-            <!-- <label for="name" class="col-lg-2 control-label">Instructor Name</label>
-            <input id="content" type="text">
-    
-            <label for="name" class="col-lg-2 control-label">Instructor Age</label>
-            <input id="messageId" type="text">
+<body>
+  <div class="col-md-6 col-md-offset-5">
+  <div style='float: right;' >
+    <a href="/logout">Logout</a>
+  </div>
+  </div>
+ <div class="container">
 
-            <label for="name" class="col-lg-2 control-label">Instructor Name</label>
-            <input id="timeStamp" type="text">
+<h1>Add Email</h1>
 
-            <label for="name" class="col-lg-2 control-label">Instructor Name</label>
-            <input id="emailId" type="text">
-    
-            <button id="button">Submit</button>   -->
+<label for="name" class="col-lg-2 control-label">Content</label>
+ <input id="content" type="text">
 
-        </div>
-        <div>
-          <ul id="taskList" class="list-unstyled">
-            <div class="taskTemplate" class="checkbox" style="display: none">
-              <label>
-                <input type="checkbox" />
-                <span class="content">Task content goes here...</span>
-              </label>
-            </div>
-          </ul>
-          <ul id="completedTaskList" class="list-unstyled">
-          </ul>
-        </div>
-        <div class="mssg bg-danger">
-            <span id="check" ></span>
-        </div>
-        <div id="LangTable">
-            <a href="/profile" id="generalUserType"></a>
-            <a href="/profile" id="adminType"></a>
-            <a href="/profile" id="judiciaryType"></a>
-        </div>
-        
-        <!-- <div><span>Forgot password?</span><a href="/forgetpass">Click here</a>
-        <div><span>Create a new Account?</span><a href="/">Register here</a> -->
-    
-        </div>
+<label for="name" class="col-lg-2 control-label">Message ID</label>
+ <input id="messageId" type="text">
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <!-- <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script> -->
-    
-    <script src="/scripts/web3/dist/web3.min.js"></script>
-    <script src="/scripts/truffle-contract/dist/truffle-contract.js"></script>
-    <!-- <script src="app.js"></script> -->
-    <script src= "./app.js"></script>
-    
-  </body>
+ <label for="name" class="col-lg-2 control-label">TimeStamp</label>
+  <input id="timeStamp" type="text">
+
+  <!-- <label for="name" class="col-lg-2 control-label">Email Id</label> -->
+   <input id="userEmailId" type="text" value = <%=data.email %> hidden >
+<!-- <p id="userEmailId" value= "<%=data.email %>" ><%=data.email %></p> -->
+
+<button id="button" >Update  </button>
+
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="ipfs.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+</script>
+
+<script>
+
+// const IPFS = require('ipfs-api');
+// const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
+
+
+ // future code goes here
+ if (typeof web3 !== "undefined")
+{
+ web3 = new Web3(web3.currentProvider);
+ }
+else
+{
+ // set the provider you want from Web3.providers
+web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+ }
+
+ //web3.eth.defaultAccount = web3.eth.accounts[0];
+
+ var request = new XMLHttpRequest();
+ request.open("GET", "contracts.txt", false);
+ request.send(null);
+ var contractDetails = JSON.parse(request.responseText);
+var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) );
+
+
+//  // var Courses = CoursesContract.at('0xd9145CCE52D386f254917e481eB44e9943F39138');
+
+ $("#button").click(function() {
+var jsonTemp = {"content":$('#content').val()};
+   //----------------------------------------post
+console.log(($('#content').val())+"-----------------------");
+   				$.ajax({
+   					type: 'POST',
+   					url: '/addEmail',
+   					data: jsonTemp,
+   					dataType: "json",
+   					success: function(response){
+        			if (response.Success=="done")
+              {
+                console.log("posted");
+        			};
+            },
+            				error: function() {
+
+   						}
+            			})
+//----------------------------------------------------
+      console.log("account0:");
+
+   console.log(web3.eth.accounts);
+   console.log(web3.eth.accounts[1]);
+   //------------------------------------------------
+   var accounts = web3.eth.getAccounts((error,result) => {
+          if (error)
+          {
+            console.log(error);
+          }
+          else
+          {
+            console.log(result[0]);
+            console.log($("#userEmailId").innerHTML);
+//----------------------------------------------------------------------------------------------------------------------------------
+//searching for duplicates of Mail
+var transCount = web3.eth.getTransactionCount(result[0], async function(err, counts){
+  if(!err)
+  {
+    var flag = 0;
+    var i = 1;
+    for(  i = 1; i<counts; i++)
+    {
+      Courses.methods.getTransaction(i)
+      .call({from: result[0]},
+        async function(error, emailTransaction)
+        {
+            if(!error)
+            {
+              if(emailTransaction[1] === $("#messageId").val() && emailTransaction[2] === $("#timeStamp").val())
+              {
+                   flag = 1;
+              }
+            }
+            else
+            {console.log(error);}
+        });//get method
+        console.log(i + " - " + flag);
+    }
+
+    if(i === counts )
+    {
+      if(flag === 1)
+      {alert("msgId + timeStamp already exists");}
+      else
+      {
+        Courses.methods.generateTransaction($("#content").val(), $("#messageId").val(),
+          $("#timeStamp").val(), $("#userEmailId").val()).send(
+            {from: result[0], gas:3000000}, function(error, transactionHash)
+              {
+                if(!error)
+                {
+                  console.log($("#content").val());
+                  console.log($("#messageId").val());
+                  console.log($("#timeStamp").val());
+                  console.log($("#userEmailId").val());
+                  console.log("updated");
+                }
+                else
+                {
+                  console.log(error);
+                }
+             }
+        );
+      }
+    }
+
+
+   // } //else
+  }
+  else
+   {console.log(err);}
+}); //transcount
+
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------
+
+          }
+  });
+//--------------------------------------------------------------
+
+var accounts = web3.eth.getAccounts((error,result) => {
+       if (error)
+       {
+         console.log(error);
+       }
+       else
+       {
+         console.log(result);
+
+         Courses.methods.getTransaction(1)
+         .call({from: result[0]},
+           function(error, result)
+           {
+               if(!error)
+               {
+                 console.log("get method");
+                 // console.log(result);
+                 console.log(result[0]);
+                 console.log(result[1]);
+                 console.log(result[2]);
+                 console.log(result[3]);
+                 console.log("result");
+               }
+               else {
+                 console.log(error);
+               }
+           }
+         );
+
+       }
+});
+//resetting
+// $("#content").val() = "";
+
+});
+document.getElementById("content").value = "";
+document.getElementById("messageId").value = "";
+document.getElementById("timeStamp").value = "";
+
+ </script>
+
+</body>
 </html>
-

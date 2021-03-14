@@ -20,25 +20,17 @@
 					data: $('#form').serialize(),
 					dataType: "json",
 					success: function(response){
-						//alert("a");
-						//console.log(response.Success);
 						$('#form')[0].reset();
 
 						document.getElementById("check").innerHTML=response.Success;
-							 //ADD THIS CODE
-						// alert(response.Success);
+
 						setTimeout(function(){
 							document.getElementById("check").innerHTML="";
 						},3000);
-						// if (response.Success=="Success!") {
-						// 	 if(response.userType == "generalUser")
-						// 		 document.getElementById("generalUserType").click();
-						// 	 else if(response.userType == "admin")
-						// 	 	 document.getElementById("adminType").click();
-						// };
+
          			},
          				error: function() {
-						 
+
 						}
          			})
 			});
@@ -65,8 +57,8 @@
 				<br>
 				<input type="submit" value="Submit" class="btn btn-success">
 			</form>
-			
-			
+
+
 		</div>
 		<div class="mssg bg-danger">
 			<span id="check" ></span>
@@ -75,14 +67,14 @@
 			<a href="/profile" id="generalUserType"></a>
 			<!-- <a href="/profile" id="adminType"></a> -->
 		</div>
-	
-		
+
+
 		<!-- <div><span>Do you forgot password?</span><a href="/forgetpass">Click here</a> -->
-		<div><a href="/profile">Back</a> 
+		<div><a href="/profile">Back</a>
 		<div><a href="/logout">Logout</a>
 
 		</div>
-		
+
 	</div>
 </body>
 </html>

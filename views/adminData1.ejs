@@ -11,20 +11,22 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 
-			function show() { 
-                var rowId =  
-                    event.target.parentNode.parentNode.id; 
-              //this gives id of tr whose button was clicked 
+			function show() {
+                var rowId =
+                    event.target.parentNode.parentNode.id;
+              //this gives id of tr whose button was clicked
 				// var data = document.getElementById(rowId).querySelectorAll(".row-data");
 				  var data = document.getElementById(rowId).querySelectorAll(".row-data");
-              /*returns array of all elements with  
-              "row-data" class within the row with given id*/ 
-  
-                var name = data[0].innerHTML; 
-                var age = data[1].innerHTML; 
-  
-                alert("Name: " + name + "\nAge: " + age); 
-            } 
+              /*returns array of all elements with
+              "row-data" class within the row with given id*/
+
+                var name = data[0].innerHTML;
+                var age = data[1].innerHTML;
+
+                alert("Name: " + name + "\nAge: " + age);
+
+								
+      }
 
 			$( "#form" ).submit(function(event) {
 				event.preventDefault();
@@ -52,7 +54,7 @@
          					};
          			},
          				error: function() {
-						 
+
 						}
          			})
 			});
@@ -112,8 +114,8 @@
 					<td>Closed</td>
 					<% } %> -->
 					<td>
-					<input type="button" value="submit" onclick="show()" /></td> 
-					<p id="waiting" hidden>waiting for judiciary details...</p>
+					<input type="button" value="submit" onclick="show()" /></td>
+					<p id="waiting" hidden>Search Initiated...</p>
 					</td>
 					<!-- <td><%= emailRequestData[i].currTimeStamp %></td> -->
 				</tr>
