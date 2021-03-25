@@ -71,8 +71,13 @@
 					<td><%= emailRequestData[i].emailTimeStamp %></td>
 					<td><%= emailRequestData[i].currTimeStamp %></td>
 					<td>
-						<button id = "button<%= i+1 %>" onclick="showData()">Search</button>
-						<h5 hidden id="content<%=i+1%>" ><%= emailRequestData[i].content %></h5>
+						<% if(emailRequestData[i].content == "") { %>
+							Content not yet received
+						<% } else { %>
+						<a href="<%= emailRequestData[i].content %>"> click here</a>
+						<% } %>
+						<!-- <button id = "button<%= i+1 %>" onclick="showData()">Search</button>
+						<h5 hidden id="content<%=i+1%>" ><%= emailRequestData[i].content %></h5> -->
 					</td>
 					<!-- <td><%= emailRequestData[i].status %></td> -->
 					<!-- <td><a href="/decryptPage/<%= emailRequestData[i].uniqueMailId%>">click here</a></td> -->

@@ -1,227 +1,170 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+  <head>
+    <title>Eml file upload</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+  	<link rel="stylesheet" href="./css/main.css">
+    <script src="https://wzrd.in/standalone/buffer"></script>
+    <script type="text/javascript" src="crypto-js.js"></script>
+<!-- <script type="text/javascript">
+    var encrypted = CryptoJS.AES(...);
+    var encrypted = CryptoJS.SHA256(...);
+</script> -->
+    <!-- <script src="https://wzrd.in/standalone/buffer"></script> -->
+<script type="text/javascript">buffer.js</script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/ipfs-api@9.0.0/dist/index.js"
+    integrity="sha384-5bXRcW9kyxxnSMbOoHzraqa7Z0PQWIao+cgeg327zit1hz5LZCEbIMx/LWKPReuB"
+    crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <form action="/">
+      <fieldset>
+        <legend>Add Email File</legend>
+      <div>
+          <center>
+            <input type="file" accept="*.eml" name="photo" id="photo" onchange='triggerValidation(this)'>
+            <button type="button" onclick="upload()" >Upload</button>
+            </center>
+        </div>
+      </fieldset>
+    </form>
+    </br>
+    </br>
+    <a id="url"></a>
+    </br>
+    </br>
+    <!-- <img id="output"> -->
+  </body>
+  <script src="web3.min.js"></script>
+  <script type="text/javascript">
 
-<head>
- <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  var regex = new RegExp("(.*?)\.(eml)$");
 
-<title>Document</title>
-
-<link rel="stylesheet" type="text/css" href="./css/main.css">
-<script src="web3.min.js"></script>
-</head>
-
-<body>
-  <div class="col-md-6 col-md-offset-5">
-  <div style='float: right;' >
-    <a href="/logout">Logout</a>
-  </div>
-  </div>
- <div class="container">
-
-<h1>Add Email</h1>
-
-<label for="name" class="col-lg-2 control-label">Content</label>
- <input id="content" type="text">
-
-<label for="name" class="col-lg-2 control-label">Message ID</label>
- <input id="messageId" type="text">
-
- <label for="name" class="col-lg-2 control-label">TimeStamp</label>
-  <input id="timeStamp" type="text">
-
-  <!-- <p><input type="file"  accept="image/*" name="image" id="file"   style="display: none;"></p>
-  <p><label for="file" style="cursor: pointer;">Upload Image</label></p>
-  <p><img id="output" width="200" /></p> -->
-
-
-   <input id="userEmailId" type="text" value = <%=data.email %> hidden >
-<button id="button" >Update  </button>
-
-
-</div>
-
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<!-- <script src="ipfs.js"></script> -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-</script>
-
-<script>
-
-// const IPFS = require('ipfs-api');
-// const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
-
-
- // future code goes here
- if (typeof web3 !== "undefined")
-{
- web3 = new Web3(web3.currentProvider);
- }
-else
-{
- // set the provider you want from Web3.providers
-web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
- }
-
- //web3.eth.defaultAccount = web3.eth.accounts[0];
-
- var request = new XMLHttpRequest();
- request.open("GET", "contracts.txt", false);
- request.send(null);
- var contractDetails = JSON.parse(request.responseText);
-var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) );
-
-
-//  // var Courses = CoursesContract.at('0xd9145CCE52D386f254917e481eB44e9943F39138');
-
- $("#button").click(function() {
-   // console.log($('#file').files[0]);
-
-  // var image = document.getElementById('output');
-  // image.src = URL.createObjectURL(document.getElementById('file').files[0]);
-
-var jsonTemp = {"content":$('#content').val()};
-   //----------------------------------------post
-console.log(($('#content').val())+"-----------------------");
-   				$.ajax({
-   					type: 'POST',
-   					url: '/addEmail',
-   					data: jsonTemp,
-   					dataType: "json",
-   					success: function(response){
-        			if (response.Success=="done")
-              {
-                console.log("posted");
-        			};
-            },
-            				error: function() {
-
-   						}
-            			})
-//----------------------------------------------------
-      console.log("account0:");
-
-   console.log(web3.eth.accounts);
-   console.log(web3.eth.accounts[1]);
-   //------------------------------------------------
-   var accounts = web3.eth.getAccounts((error,result) => {
-          if (error)
-          {
-            console.log("$$$$$$$$$$$$"+error);
-          }
-          else
-          {
-            console.log(result + "--------------");
-            console.log($("#userEmailId").innerHTML);
-//----------------------------------------------------------------------------------------------------------------------------------
-//searching for duplicates of Mail
-var transCount = web3.eth.getTransactionCount(result[0], async function(err, counts){
-  if(!err)
-  {
-    var flag = 0;
-    var i = 1;
-    for(  i = 1; i<counts; i++)
-    {
-      Courses.methods.getTransaction(i)
-      .call({from: result[0]},
-        async function(error, emailTransaction)
-        {
-            if(!error)
-            {
-              if(emailTransaction[1] === $("#messageId").val() && emailTransaction[2] === $("#timeStamp").val())
-              {
-                   flag = 1;
-              }
-            }
-            else
-            {console.log(error);}
-        });//get method
-        console.log(i + " - " + flag);
+  function triggerValidation(el) {
+    if (!(regex.test(el.value.toLowerCase()))) {
+      el.value = '';
+      alert('Please select correct file format');
     }
-
-    if(i === counts )
-    {
-      if(flag === 1)
-      {alert("msgId + timeStamp already exists");}
-      else
-      {
-        Courses.methods.generateTransaction($("#content").val(), $("#messageId").val(),
-          $("#timeStamp").val(), $("#userEmailId").val()).send(
-            {from: result[0], gas:3000000}, function(error, transactionHash)
-              {
-                if(!error)
-                {
-                  console.log($("#content").val());
-                  console.log($("#messageId").val());
-                  console.log($("#timeStamp").val());
-                  console.log($("#userEmailId").val());
-                  console.log("updated");
-                }
-                else
-                {
-                  console.log(error);
-                }
-             }
-        );
-      }
-    }
-
-
-   // } //else
   }
+   // future code goes here
+   if (typeof web3 !== "undefined")
+  {
+   web3 = new Web3(web3.currentProvider);
+   }
   else
-   {console.log(err);}
-}); //transcount
+  {
+   // set the provider you want from Web3.providers
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  // web3 = new  Web3(window.web3.currentProvider);
+   }
+
+   //web3.eth.defaultAccount = web3.eth.accounts[0];
+
+   var request = new XMLHttpRequest();
+   request.open("GET", "contracts.txt", false);
+   request.send(null);
+   var contractDetails = JSON.parse(request.responseText);
+  var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) );
 
 
 
-//--------------------------------------------------------------------------------------------------------------------------------------
+  var accounts = web3.eth.getAccounts((error,result) => {
+      console.log(result);
+    if (error)
+    {
+      console.log(error);
+    }})
 
-          }
-  });
-//--------------------------------------------------------------
+   async function upload() {
 
-var accounts = web3.eth.getAccounts((error,result) => {
-       if (error)
-       {
-         console.log(error);
-       }
-       else
-       {
-         console.log(result);
+                ethereum.enable();
+                var accounts =  web3.eth.getAccounts( (error,result) => {
+                  if (error) {
+                    console.log(error);
+                  }
+                  console.log("second");
+                    console.log(result);
+                });
 
-         Courses.methods.getTransaction(1)
-         .call({from: result[0]},
-           function(error, result)
-           {
-               if(!error)
-               {
-                 console.log("get method");
-                 // console.log(result);
-                 console.log(result[0]);
-                 console.log(result[1]);
-                 console.log(result[2]);
-                 console.log(result[3]);
-                 console.log("result");
-               }
-               else {
-                 console.log(error);
-               }
-           }
-         );
 
-       }
-});
-//resetting
-// $("#content").val() = "";
+      const reader = new FileReader();
+      reader.onloadend = function() {
+        const ipfs = window.IpfsApi('localhost', 5001) // Connect to IPFS
+        console.log(reader.result);
+//uncomment - not working due to wzrd.in/standalone/buffer not working
+        // const buf = buffer.Buffer(reader.result) // Convert data into buffer
+        // ipfs.files.add(buf, (err, result) => { // Upload buffer to IPFS
+        //   if(err) {
+        //     console.error(err)
+        //     return
+        //   }
+        //   console.log(result[0].hash);
+        //   let url = `https://ipfs.io/ipfs/${result[0].hash}`
+//uncomment
 
-});
-document.getElementById("content").value = "";
-document.getElementById("messageId").value = "";
-document.getElementById("timeStamp").value = "";
- </script>
+url = "Temp Email Data";
 
-</body>
+          $.ajax({
+                type:'POST',
+                url:'/addEmail',
+                data : {"url":url},
+                dataType: "json",
+                success: function(response){
+                  console.log(response.success);
+                  console.log(response.timeStamp);
+                  console.log(response.messageId);
+
+                  var messageId = response.messageId;
+                  var timeStamp = response.timeStamp;
+                  var email = response.email;
+
+                  var accounts = web3.eth.getAccounts((error,result) => {
+                    	console.log(result);
+                    if (error)
+                    {
+                      console.log(error);
+                    }
+                    else
+                    {
+                      console.log("result 0 : ");
+     								 console.log(result[0]);
+                Courses.methods.generateTransaction(url, messageId,
+                     timeStamp, email).send(
+                     {from: result[0], gas:3000000}, function(error, transactionHash)
+                      {
+                        if(!error)
+                        {
+                          console.log(url);
+                          console.log(messageId);
+                          console.log(timeStamp);
+                          console.log(email);
+                          console.log("updated");
+                          // location.reload();
+                        }
+                        else
+                        {
+                          console.log(error);
+                        }
+                     });
+                                        }
+                                 });
+
+
+                }
+            });
+
+          console.log(`Url --> ${url}`)
+          document.getElementById("url").innerHTML= url
+          document.getElementById("url").href= url
+          // document.getElementById("output").src = url
+
+        // }) //ipfs add file
+      }
+      const photo = document.getElementById("photo");
+      reader.readAsArrayBuffer(photo.files[0]); // Read Provided File
+    }
+  </script>
+
 </html>

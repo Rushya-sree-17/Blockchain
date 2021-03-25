@@ -1,0 +1,82 @@
+{
+  "date": "2021-03-17T16:17:12.000Z",
+  "subject": "My fake Facebook account",
+  "from": {
+    "name": "Dean of Student Affairs, IIT Indore",
+    "email": "dosa@iiti.ac.in"
+  },
+  "to": {
+    "name": "all",
+    "email": "all@iiti.ac.in"
+  },
+  "headers": {
+    "Delivered-To": "cse170001013@iiti.ac.in",
+    "Received": [
+      "by 2002:a2e:9789:0:0:0:0:0 with SMTP id y9csp435828lji;\r\nWed, 17 Mar 2021 09:17:39 -0700 (PDT)",
+      "from mail-sor-f69.google.com (mail-sor-f69.google.com. [209.85.220.69])\r\nby mx.google.com with SMTPS id j4sor5141946oii.72.2021.03.17.09.17.38\r\nfor <cse170001013@iiti.ac.in>\r\n(Google Transport Security);\r\nWed, 17 Mar 2021 09:17:39 -0700 (PDT)",
+      "by 2002:a4a:4913:: with SMTP id z19ls1596298ooa.4.gmail; Wed, 17 Mar\r\n2021 09:17:27 -0700 (PDT)",
+      "by 2002:aca:2309:: with SMTP id e9ls5778181oie.5.gmail; Wed, 17 Mar\r\n2021 09:17:27 -0700 (PDT)",
+      "by 2002:aca:4c55:: with SMTP id z82ls5562011oia.2.gmail; Wed, 17 Mar\r\n2021 09:17:26 -0700 (PDT)",
+      "from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])\r\nby mx.google.com with SMTPS id l1sor5160199otn.158.2021.03.17.09.17.25\r\nfor <all@iiti.ac.in>\r\n(Google Transport Security);\r\nWed, 17 Mar 2021 09:17:25 -0700 (PDT)"
+    ],
+    "X-Received": [
+      "by 2002:a9d:6e18:: with SMTP id e24mr1534336otr.284.1615997859134;\r\nWed, 17 Mar 2021 09:17:39 -0700 (PDT)",
+      "by 2002:aca:f156:: with SMTP id p83mr3338233oih.91.1615997848088;\r\nWed, 17 Mar 2021 09:17:28 -0700 (PDT)",
+      "by 2002:a4a:dc51:: with SMTP id q17mr3934520oov.76.1615997847570;\r\nWed, 17 Mar 2021 09:17:27 -0700 (PDT)",
+      "by 2002:aca:4785:: with SMTP id u127mr3201560oia.163.1615997847175;\r\nWed, 17 Mar 2021 09:17:27 -0700 (PDT)",
+      "by 2002:aca:d90a:: with SMTP id q10mr3388097oig.63.1615997845808;\r\nWed, 17 Mar 2021 09:17:25 -0700 (PDT)",
+      "by 2002:a9d:2f04:: with SMTP id h4mr3988649otb.364.1615997844117;\r\nWed, 17 Mar 2021 09:17:24 -0700 (PDT)"
+    ],
+    "ARC-Seal": [
+      "i=3; a=rsa-sha256; t=1615997859; cv=pass;\r\nd=google.com; s=arc-20160816;\r\nb=rKJubM4N01Y4PheuVh2rETHbpl3qUk6W9jO1cCsSxYWlAdzWeiBFREgQoY4mRNDKGi\r\ntvg9ddGwjxzfTPVqP/Uz4tasB7X3oh/toFzD95sbkf7kHJFS4ut2M750AXo/fSp0iHaQ\r\nH/AXtToGJj86Dkdnzr3dghhzszKeeep+WiNhItzqKs+t/ANCOFe+erb97akfZIsUFW2W\r\nB5wwgRXhTuve244C+wuP0Lyi2NZ/lYnvR57SQYYENrKkXK8b1bTy7cGQg0m+iTeDWi2E\r\nSyP0FZ05jYaSlRRGN2cN0AES+dWHlb2E/Ir2sYt84N77rTM0hk8kxOARkEB9ot9UCKNc\r\nUS/w==",
+      "i=2; a=rsa-sha256; t=1615997858; cv=pass;\r\nd=google.com; s=arc-20160816;\r\nb=au8ucFOdDvYQJggJK8qXU1xR23Zoe+0ctoAiSikINs2ar+AZjSyQg0CBm/KEE7ZKkL\r\nCZxeMMZiw865TDA8RWHuS9hStnA+mnHIAJlNuP1jESWxt61gzPmdhUMRKtg0+UADAASf\r\n/XQLHGggQYC2k1nWFoDik5SFqCm/SZjybN0ttaYeYj3/xiCKnK1v7dZWT9sCJ7ObA/o5\r\n/UqNPoCKv1YTgHhv0YAV3sLhw44WObPfWsC0AY3woo8m1oHZrUwdrpK4zws6qMb5EvHx\r\n0lOwZ4p59MZGo2SdI0U9fvzBgUnBnVEDWALOGbFIUztzP5rcmhzfY5zIbDza4/pJWPmX\r\nlNFg==",
+      "i=1; a=rsa-sha256; t=1615997845; cv=none;\r\nd=google.com; s=arc-20160816;\r\nb=v0fd01YcmBASwG7HwKj0GiIIKssr0bwXosPrMip+bVgvamuSorTApffrYVpcYj2Lm9\r\nPxkBbcsbqLdv8p5TINw3BydyyO/7QqM3dE6qR5y2mRIN3exDGsBAIdt5Uc5SfAg6teXl\r\nTIcSrxLYGtQvOdAH1XYj0tz2UN/0i6aDgQY6ahj0SdKjGH/ZT88TLTT7xEY1m1rnhPCl\r\n2c6ZVWP+I8n4AyWmrJMGVLb93gA2F23D7BN8/fuwontNaAzFN5AjeroiszMx70rRUGnH\r\nCZhVRS+gXBtd5I63gV70oe3Lv8rlycYwGwKjW4TrgYlFw/4mlxDJzmA79Yczb1+8U4su\r\nqzGA=="
+    ],
+    "ARC-Message-Signature": [
+      "i=3; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;\r\nh=list-subscribe:list-unsubscribe:list-archive:list-help:list-post\r\n:list-id:mailing-list:precedence:to:subject:message-id:date:from\r\n:mime-version:dkim-signature;\r\nbh=7pU+rW9t+ks+9rkXTJzt+PR7Igv0siJAIR8B5G8PuQM=;\r\nb=HF+zUx0EdgV9A+b4knTq5PA6HDvPynCIHB5Kchatnr6OhYK8lu3fh8RJMP4+ZTbUGd\r\n3sEv+VcPt/BwUvwcAMpY9GwgqG3qpL7Ne6V2/e7mk84DJCv2baJwS1Odm2RXIzIIU9hs\r\ndG2EF13P2kZjDvcItPFn4mVFAe7IGpX+/1v8IHlptdtDilt8cWJoAjx7kuiCS/z9mNj6\r\ny16E9GyliELJYKBP3ulfB3P3wwAAODlxNwV2OGn/7d9hi8wALso1QA6kN2tRCCBpoRtX\r\n+FAOdqbsYEqWvxu/aBAmHTu2lwkcerKexmHRvCGhkpSIbmYMaPF6dM7WHuHQOmTzOemW\r\n+x/g==",
+      "i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;\r\nh=list-subscribe:list-unsubscribe:list-archive:list-help:list-post\r\n:list-id:mailing-list:precedence:to:subject:message-id:date:from\r\n:mime-version:dkim-signature;\r\nbh=7pU+rW9t+ks+9rkXTJzt+PR7Igv0siJAIR8B5G8PuQM=;\r\nb=ebgnTQDnK2Xn8aquL6YLxpK1sn60BZzgIxvvvf2JfEXdy/grJnRLpvBduGaRBLq6p/\r\nW9uLCwoWwrqqxLYmUMwV7a2DJeOxdznyhKr0Tn7fRtIXMdHINKP8ZsPMD148m7S1UMmg\r\nVIv+FC3VpbS2c9NGkF33oORx6ApZ0DOVIeP1h0Wd/4E57EcGwzFEUUZyB9QK2oPSdvuv\r\nIae6TCc9OSDix8SNhlmJ9Ttl4Ue9xH5gGKXNpGILkLdy1/zbSzyreJeBfpbQI/ez5Slm\r\nyPEk+W0MH6oso/vJc8yTFY+NbWoMHgiEc4nvtNL2sVbNwF6ABN/U6KKcDKTp5YS8k5QI\r\nR0WQ==",
+      "i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;\r\nh=to:subject:message-id:date:from:mime-version:dkim-signature;\r\nbh=7pU+rW9t+ks+9rkXTJzt+PR7Igv0siJAIR8B5G8PuQM=;\r\nb=IC8N2jmPbrXQcBB/NXtH3C1kVIFBuUn+7nsvhA320vxaS5v37jk990g55cn3OhIKkF\r\n2bEK+t6RtP8gDK3K/100+/7zlH0OrQEpNitoeVS6YurSpuYsx6iwtvZH/+uxmULpN03N\r\nM5/uOsfQ/n3LEHoMMaEz5kkNITJN+H7YRbGxxis3eVnY3eHB6uOs+O3VC2f+I5SUHdc1\r\nPiWR3H/6Nn9GCwmEVvY4FN7bp/KhhtD6zZwxt4uORE6ixJpLDW+NKdeYl7o3tBv0NOAw\r\n4SrxZ56JHnhDJG1TLLDJRSOa1ZmSNb+hO7dIIxICnqdXsqIM5Cw9iFEEWwDy4jX+N0Hx\r\n/IVw=="
+    ],
+    "ARC-Authentication-Results": [
+      "i=3; mx.google.com;\r\ndkim=pass header.i=@iiti.ac.in header.s=google header.b=oziizIPM;\r\narc=pass (i=2 spf=pass spfdomain=iiti.ac.in dkim=pass dkdomain=iiti.ac.in dmarc=pass fromdomain=iiti.ac.in);\r\nspf=pass (google.com: domain of 2017btech-cse+bncbdyixqorqucbbggxzcbamgqex5tgfva@iiti.ac.in designates 209.85.220.69 as permitted sender) smtp.mailfrom=2017btech-cse+bncBDYIXQORQUCBBGGXZCBAMGQEX5TGFVA@iiti.ac.in;\r\ndmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=iiti.ac.in",
+      "i=2; mx.google.com;\r\ndkim=pass header.i=@iiti.ac.in header.s=google header.b=Tfob+R79;\r\nspf=pass (google.com: domain of dosa@iiti.ac.in designates 209.85.220.41 as permitted sender) smtp.mailfrom=dosa@iiti.ac.in;\r\ndmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=iiti.ac.in",
+      "i=1; mx.google.com;\r\ndkim=pass header.i=@iiti.ac.in header.s=google header.b=Tfob+R79;\r\nspf=pass (google.com: domain of dosa@iiti.ac.in designates 209.85.220.41 as permitted sender) smtp.mailfrom=dosa@iiti.ac.in;\r\ndmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=iiti.ac.in"
+    ],
+    "Return-Path": "<2017btech-cse+bncBDYIXQORQUCBBGGXZCBAMGQEX5TGFVA@iiti.ac.in>",
+    "Received-SPF": [
+      "pass (google.com: domain of 2017btech-cse+bncbdyixqorqucbbggxzcbamgqex5tgfva@iiti.ac.in designates 209.85.220.69 as permitted sender) client-ip=209.85.220.69;",
+      "pass (google.com: domain of dosa@iiti.ac.in designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;"
+    ],
+    "Authentication-Results": "mx.google.com;\r\ndkim=pass header.i=@iiti.ac.in header.s=google header.b=oziizIPM;\r\narc=pass (i=2 spf=pass spfdomain=iiti.ac.in dkim=pass dkdomain=iiti.ac.in dmarc=pass fromdomain=iiti.ac.in);\r\nspf=pass (google.com: domain of 2017btech-cse+bncbdyixqorqucbbggxzcbamgqex5tgfva@iiti.ac.in designates 209.85.220.69 as permitted sender) smtp.mailfrom=2017btech-cse+bncBDYIXQORQUCBBGGXZCBAMGQEX5TGFVA@iiti.ac.in;\r\ndmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=iiti.ac.in",
+    "DKIM-Signature": "v=1; a=rsa-sha256; c=relaxed/relaxed;\r\nd=iiti.ac.in; s=google;\r\nh=mime-version:from:date:message-id:subject:to:x-original-sender\r\n:x-original-authentication-results:precedence:mailing-list:list-id\r\n:list-post:list-help:list-archive:list-unsubscribe:list-subscribe;\r\nbh=7pU+rW9t+ks+9rkXTJzt+PR7Igv0siJAIR8B5G8PuQM=;\r\nb=oziizIPM46YmbkdZMRvZwLn6BjDOjW4MttPPmC4nE/uGnuyb4nnGJ9Ivtwt0gfZN40\r\nmXaaaXceISQAupLPF8jeQnT7+9LRRpL0EMkDdtlctN1gD4BYR4LVwv45kN4hVG+KL/A/\r\nS30RYfFDuZw8dyZdgPXJkYca9TxH/vYxwtBs4=",
+    "X-Google-DKIM-Signature": "v=1; a=rsa-sha256; c=relaxed/relaxed;\r\nd=1e100.net; s=20161025;\r\nh=x-gm-message-state:mime-version:from:date:message-id:subject:to\r\n:x-original-sender:x-original-authentication-results:precedence\r\n:mailing-list:list-id:x-spam-checked-in-group:list-post:list-help\r\n:list-archive:list-unsubscribe:list-subscribe;\r\nbh=7pU+rW9t+ks+9rkXTJzt+PR7Igv0siJAIR8B5G8PuQM=;\r\nb=a7jVs8HD8Mwb+lcTcJLrYxGUv+JjMz5HMOXUgBl50nRWqYe9U5wkfVneF0DWf5HFUa\r\nN2ntVdpohdkASItZYaNkCzmY7yeix/uwvWnHXcUn1xdtR+nRGO7wqKwuWeU87UdQpNzV\r\n76teoC2ieLVtaPJRAjwgBcd/yQvLayHROr0idAss/OU7N1OYTPKzIcq9Hmg1L011XxFJ\r\nMKKelwBvnGIvmYQAmnL3gCzupP73uhYTPWgJsXhYExabOH2RhSCgFqaWa8QY8Q4RuXmE\r\nqKj2Y80I4Af7wai2umR9bBIgmOuWVTg81hus8np1K2/KeRNnVEKl3th8lCHiVLNK/BfW\r\nK3EQ==",
+    "X-Gm-Message-State": "AOAM530StLNpF9KZK+XEa8Amsp5dlaCyLTkS1Gpixgp7MK9pUZzvzpDP\r\nQplwzZb/pnwCH6FmmoYfYHGEouQS",
+    "X-Google-Smtp-Source": "ABdhPJxAgTfgqzce5L0mepbFiSZ9BXdGF6aM7lxAY71nTpQcJKR44RPj+gIXzzaPR3OX+t5L5hpu/Q==",
+    "X-BeenThere": [
+      "2017btech-cse@iiti.ac.in",
+      "allstudent@iiti.ac.in",
+      "all@iiti.ac.in"
+    ],
+    "MIME-Version": "1.0",
+    "From": "\"Dean of Student Affairs, IIT Indore\" <dosa@iiti.ac.in>",
+    "Date": "Wed, 17 Mar 2021 21:47:12 +0530",
+    "Message-ID": "<CAAM56K1fKTPm70NoeW483YbjixCgLN1DnfaDREwBx+My5=94tA@mail.gmail.com>",
+    "Subject": "My fake Facebook account",
+    "To": "all <all@iiti.ac.in>",
+    "Content-Type": "multipart/alternative; boundary=\"0000000000007504f205bdbdd1c9\"",
+    "X-Original-Sender": "dosa@iiti.ac.in",
+    "X-Original-Authentication-Results": "mx.google.com;       dkim=pass\r\nheader.i=@iiti.ac.in header.s=google header.b=Tfob+R79;       spf=pass\r\n(google.com: domain of dosa@iiti.ac.in designates 209.85.220.41 as permitted\r\nsender) smtp.mailfrom=dosa@iiti.ac.in;       dmarc=pass (p=QUARANTINE\r\nsp=QUARANTINE dis=NONE) header.from=iiti.ac.in",
+    "Precedence": "list",
+    "Mailing-list": "list 2017btech-cse@iiti.ac.in; contact 2017btech-cse+owners@iiti.ac.in",
+    "List-ID": "<2017btech-cse.iiti.ac.in>",
+    "X-Spam-Checked-In-Group": "all@iiti.ac.in",
+    "X-Google-Group-Id": "1023604755294",
+    "List-Post": "<https://groups.google.com/a/iiti.ac.in/group/2017btech-cse/post>, <mailto:2017btech-cse@iiti.ac.in>",
+    "List-Help": "<https://support.google.com/a/iiti.ac.in/bin/topic.py?topic=25838>, <mailto:2017btech-cse+help@iiti.ac.in>",
+    "List-Archive": "<https://groups.google.com/a/iiti.ac.in/group/2017btech-cse/>",
+    "List-Unsubscribe": "<mailto:googlegroups-manage+1023604755294+unsubscribe@googlegroups.com>,\r\n<https://groups.google.com/a/iiti.ac.in/group/2017btech-cse/subscribe>",
+    "List-Subscribe": "<https://groups.google.com/a/iiti.ac.in/group/2017btech-cse/subscribe>,\r\n<mailto:2017btech-cse+subscribe@iiti.ac.in>"
+  },
+  "text": "Dear All,\r\nI came to know that someone has created my fake Facebook account I’d (\r\nSantosh Kumar Vishvakarma) so don’t accept friend request. Sorry for\r\ninconvenience.\r\nSantosh\r\n\r\n-- \r\n​Dr. Santosh Kumar Vishvakarma, Associate Professor\r\n​​Nanoscale Devices, VLSI Circuit and System Design Research Group\r\n<https://sites.google.com/site/svishvakarma/>\r\nDiscipline of Electrical Engineering\r\n&\r\nDean of Student Affairs\r\nIndian Institute of Technology Indore <http://iiti.ac.in/>\r\nKhandwa Road, Simrol, Indore 453552, India\r\nContact No. :  +91-7324-306595 (Office), +91-9713722841 (Mobile),\r\n+91-7999834356 (Mobile)\r\nE-mail: skvishvakarma@iiti.ac.in\r\nWebpage: https://sites.google.com/site/svishvakarma/\r\n",
+  "html": "Dear All,<div dir=\"auto\">I came to know that someone has created my fake Facebook account I’d ( Santosh Kumar Vishvakarma) so don’t accept friend request. Sorry for inconvenience.</div><div dir=\"auto\">Santosh </div><div dir=\"auto\"><br></div>-- <br><div dir=\"ltr\" class=\"gmail_signature\" data-smartmail=\"gmail_signature\"><div dir=\"ltr\"><div><div dir=\"ltr\"><div><div dir=\"ltr\"><div dir=\"ltr\"><div dir=\"ltr\"><span style=\"font-family:arial,helvetica,sans-serif\">​</span>Dr. Santosh Kumar Vishvakarma, Associate Professor </div><div dir=\"ltr\"><span style=\"font-family:arial,helvetica,sans-serif\">​​</span><a href=\"https://sites.google.com/site/svishvakarma/\" target=\"_blank\">Nanoscale Devices, VLSI Circuit and System Design Research Group</a><br>Discipline of Electrical Engineering </div><div dir=\"ltr\">&amp;</div><div dir=\"ltr\">Dean of Student Affairs<br><a href=\"http://iiti.ac.in/\" target=\"_blank\">Indian Institute of Technology Indore</a></div><div dir=\"ltr\">Khandwa Road, Simrol, Indore 453552, India<br></div><div dir=\"ltr\">Contact No. :  +91-7324-306595 (Office), +91-9713722841 (Mobile), +91-7999834356 (Mobile)   <br></div><div dir=\"ltr\">E-mail: <a href=\"mailto:skvishvakarma@iiti.ac.in\" style=\"color:rgb(17,85,204)\" target=\"_blank\">skvishvakarma@iiti.ac.in</a> <br>Webpage: <a href=\"https://sites.google.com/site/svishvakarma/\" style=\"color:rgb(17,85,204)\" target=\"_blank\">https://sites.google.com/site/svishvakarma/</a></div></div></div></div></div></div></div></div>\r\n"
+}

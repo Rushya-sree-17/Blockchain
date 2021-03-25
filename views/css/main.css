@@ -23,6 +23,14 @@ input{
 	margin-bottom: 5px;
 	border-radius: 5px;
 }
+/* .wrapper {
+    text-align: center;
+} */
+
+button {
+  margin:auto;
+  display:block;
+}
 
 .form2{
     display : block;

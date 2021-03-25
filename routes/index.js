@@ -2,17 +2,32 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var EmailRequest = require('../models/emailRequest');
+var fs = require('fs');
+var busboy = require('connect-busboy');
+var path = require('path');
+var formidable = require('formidable');
+const multer = require('multer');
+var mime    =   require('mime');
+var request = require('request');
+var emlformat = require('eml-format');
+const EthCrypto = require('eth-crypto');
+//...
+router.use(busboy());
 
-// const ipfsClient = require('ipfs-http-client');
+var storage	=	multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './uploads');
+  },
+  filename: function (req, file, callback) {
+    console.log(file);
+    callback(null, file.fieldname + '-' + Date.now() + '.' + mime.extension(file.mimetype));
+  }
+});
+var upload = multer({ storage : storage }).array('userPic');
+
 const ipfsAPI = require('ipfs-api');
-// const ipfs = ipfsClient({host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
 const ipfs = ipfsAPI('ipfs.infura.io', '5001', {protocol: 'https'})
 
-// const ipfs = ipfsClient('http://localhost:5001');
-// const IPFS = require('ipfs-api');
-// const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
-
-// var Judiciary = require('../models/judiciary');
 var randToken = require('rand-token');
 
 const addContent =  ({path, content}) => {
@@ -289,39 +304,53 @@ router.get('/profile', function (req, res, next) {
 });
 
 
-router.post('/addEmail', async function(req,res,next) {
-	const data = req.body.content;
-	console.log("-----------------------" + data);
-	// const fileHash = addContent(data);
 
-	let testBuffer = new Buffer(data);
-
-	ipfs.files.add(testBuffer, function (err, file) {
-	        if (err) {
-	          console.log(err);
-	        }
-	        console.log(file);
-					console.log(file);
-	      })
-
-	ipfs.files.get('QmRg18TJxxeqETYsxMZZDARPQULKVjQUpxuGv1NKgTPCK6', function (err, files) {
-        files.forEach((file) => {
-					console.log("hiiiiiiiiiiii"+file.content.toString('utf8'))
-          console.log(file.path)
-          console.log(file.content.toString('utf8'))
-        })
-      })
+router.post('/addEmail',   function(req,res,next) {
+  var url = req.body.url;
+  console.log(url);
+  //temporary one
+const message = url;
+const msgHash = EthCrypto.hash.keccak256(message);
 
 
-	res.send({"Success":"done"});
+const publicKey = EthCrypto.publicKeyByPrivateKey(
+     'b8d6067b4b4280913872fe826cdec4dc0179009f9c3432f72074e77189b58c37'
+ );
+ console.log("public key "+publicKey);
 
+ const address = EthCrypto.publicKey.toAddress(
+      publicKey
+  );
+  
+ console.log("address "+address);
+res.send({"success":"Sucsess","timeStamp":"timeStampt", "messageId":"messageIdt", "email":"emailt"});
+//uncomment
+  // request.get(url, function (error, response, body) {
+  //     if (!error && response.statusCode == 200)
+  //     {
+  //         var eml = body;
+  //         // console.log(body);
+  //
+  //         emlformat.read(eml, function(error, data) {
+  //             if (error) return console.log(error);
+  //             var timeStamp = data["headers"]["Date"];
+  //             var messageId = data["headers"]["Message-ID"];
+  //             var email = data["from"]["email"];
+  //             console.log(timeStamp + " " + messageId + " " + email );
+  //
+  //             res.send({"success":"Success", "timeStamp":timeStamp,
+  //                       "messageId":messageId, "email":email});
+  //         });
+  //     }
+  // });
+//uncomment
 });
 
 router.get('/addEmail',function(req,res,next){
 
 	User.findOne({uniqueId:req.session.userId},function(err,data){
-		console.log("data");
-		console.log(data);
+		// console.log("data");
+		// console.log(data);
 		if(!data){
 			res.redirect('/');
 		}else{

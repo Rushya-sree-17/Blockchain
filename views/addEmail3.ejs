@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<title>Document</title>
+
+<link rel="stylesheet" type="text/css" href="./css/main.css">
+<script src="web3.min.js"></script>
+<script src="ipfs.min.js"></script>
+</head>
+
+<body>
+  <div class="col-md-6 col-md-offset-5">
+  <div style='float: right;' >
+    <a href="/logout">Logout</a>
+  </div>
+  </div>
+ <div class="container">
+
+<h1>Add Email</h1>
+
+<form  method="post" action="/addEmail"  enctype="multipart/form-data">
+
+  <!-- <input type="text" name="user"><br>
+      <input type="text" name="email"><br> -->
+  	<input type="file" name="userPic"><br>
+      <input type="submit" value="Submit">
+
+</form>
+
+<!-- <input type="file" id="file" name="file"/>
+<button id="send-file" onclick="sendFile()">Send</button> -->
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<!-- <script src="ipfs.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+</script>
+
+<script>
+
+ // future code goes here
+ if (typeof web3 !== "undefined")
+{
+ web3 = new Web3(web3.currentProvider);
+ }
+else
+{
+ // set the provider you want from Web3.providers
+web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+ }
+
+ //web3.eth.defaultAccount = web3.eth.accounts[0];
+
+ var request = new XMLHttpRequest();
+ request.open("GET", "contracts.txt", false);
+ request.send(null);
+ var contractDetails = JSON.parse(request.responseText);
+var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) );
+
+//
+// var send_file = $("#send-file");
+// $(document).on('submit', '#Form', function(e)
+// {
+//   console.log("click");
+//   var file = $("#file").get(0).files ;
+//   console.log(file);
+//   var form_data = new FormData();
+//   form_data.append('file', file);
+//
+//   $.ajax({
+//       type:'POST',
+//       url:'/addEmail',
+//       processData: false,
+//       contentType: false,
+//       async: false,
+//       cache: false,
+//       data : form_data,
+//       success: function(response){
+//         console.log("success");
+//       }
+//   });
+// });
+
+//
+// send_file.on("click", function(e) {
+//   console.log("click");
+//     //file
+//     var file = $("#file")[0].files[0];
+//     console.log(file);
+//     //formdata
+//     var fd = new FormData();
+//     console.log(fd);
+//     fd.append("file", file, "file_name");
+//     //send file
+//     $.ajax({
+//             url: '/addEmail',
+//             data: fd,
+//             contentType: false,
+//             processData: false,
+//             type: 'POST'
+//         })
+//         .done(function(data) {
+//             console.log(data);
+//             console.log("Upload successfully");
+//         });
+// });
+ </script>
+
+</body>
+</html>
