@@ -11,8 +11,14 @@ var mime    =   require('mime');
 var request = require('request');
 var emlformat = require('eml-format');
 const EthCrypto = require('eth-crypto');
+const buffer = require('buffer');
+const fileupload = require('express-fileupload');
+const fetch = require("node-fetch");
+const utf8 = require('utf8');
+const https = require('https');
 //...
-router.use(busboy());
+router.use(fileupload(), busboy());
+
 
 var storage	=	multer.diskStorage({
   destination: function (req, file, callback) {
@@ -26,7 +32,8 @@ var storage	=	multer.diskStorage({
 var upload = multer({ storage : storage }).array('userPic');
 
 const ipfsAPI = require('ipfs-api');
-const ipfs = ipfsAPI('ipfs.infura.io', '5001', {protocol: 'https'})
+const ipfs =  ipfsAPI('localhost', 5001);
+// ipfsAPI('ipfs.infura.io', '5001', {protocol: 'https'})
 
 var randToken = require('rand-token');
 
@@ -119,12 +126,47 @@ router.post('/login', function (req, res, next) {
 	});
 });
 
+router.post('/decryptPageAdmin', async function (req, res, next){
+
+    console.log(req.body.url);
+    console.log(req.body.privateKey);
+
+    var privateKey = req.body.privateKey;
+    var url = req.body.url;
+
+      const publicKey = await EthCrypto.publicKeyByPrivateKey(privateKey);
+
+      var ipfsData = "";
+      let qwe = await fetch(url)
+        .then(response => response.text())
+        .then(text => {
+          try {
+            ipfsData = text;
+              // console.log(text);
+          } catch(err) {
+            console.log(err);
+             // It is text, do you text handling here
+          }
+        });
+        // const temp = JSON.stringify(encrypted);
+        // console.log(temp);
+        // console.log(encrypted);
+        console.log("Admin Data");
+        console.log(ipfsData);
+        const decryptMessage = await EthCrypto.decryptWithPrivateKey(privateKey, JSON.parse(ipfsData));
+        console.log("decryptMessage in Admin " + decryptMessage);
+
+
+});
 
 router.post('/adminData', function (req, res, next) {
 	console.log("req body");
 	console.log(req.body);
 	var emailUniqueId = req.body.uniqueMailId;
-	var content = req.body.emailContent;
+	var content = req.body.emailContent; // url
+
+res.render('decryptPageAdmin.ejs', {url:req.body.url});
+
 	var statusToBeUpdated = "Mail Sent to judiciary";
 console.log(emailUniqueId);
 if(content === "Invalid request")
@@ -232,6 +274,93 @@ router.post('/addJudiciary', function (req, res, next) {
 	}
 });
 
+router.get('/decryptPageJud', function(req, res, next) {
+  console.log("get decryptPageJud");
+  res.render('decryptPageJud.ejs');
+})
+
+router.get('/decryptPageAdmin', function(req, res, next) {
+  console.log("get decryptPageAdmin");
+  res.render('decryptPageAdmin.ejs');
+})
+
+router.post('/decryptPageJud', async function(req, res, next){
+  console.log("post decryptPageJud");
+  console.log(req.body.url);
+  console.log(req.body.privateKey);
+
+  var privateKey = req.body.privateKey;
+  var url = req.body.url;
+
+    const publicKey = await EthCrypto.publicKeyByPrivateKey(privateKey);
+
+    var ipfsData = "";
+    let qwe = await fetch(url)
+      .then(response => response.text())
+      .then(text => {
+        try {
+          ipfsData = text;
+            // console.log(text);
+        } catch(err) {
+          console.log(err);
+           // It is text, do you text handling here
+        }
+      });
+      // const temp = JSON.stringify(encrypted);
+      // console.log(temp);
+      // console.log(encrypted);
+      console.log("Judiciary Data");
+      console.log(ipfsData);
+      const decryptMessage = await EthCrypto.decryptWithPrivateKey(privateKey, JSON.parse(ipfsData));
+      console.log("decryptMessage in judiciary "+decryptMessage);
+
+
+  res.send({"success":"success", "decryptMessage":decryptMessage});
+
+})
+
+
+router.post('/judiciaryData', async function (req, res, next){
+  // console.log(req.body.privateKey);
+  // console.log(req.body.url);
+  console.log("post jud data");
+  console.log(req.body.url);
+// res.redirect('/decryptPageJud');
+res.render('decryptPageJud.ejs', {url:req.body.url});
+
+
+
+  // res.send('/decryptPageJud.ejs',{'url':req.body.url});
+// res.sendFile(path.join(__dirname+'/decryptPageJud'));
+  // var privateKey = req.body.privateKey;
+  // var url = req.body.url;
+  //
+  //   const publicKey = await EthCrypto.publicKeyByPrivateKey(privateKey);
+  //
+  //   var ipfsData = "";
+  //   let qwe = await fetch(url)
+  //     .then(response => response.text())
+  //     .then(text => {
+  //       try {
+  //         ipfsData = text;
+  //           // console.log(text);
+  //       } catch(err) {
+  //         console.log(err);
+  //          // It is text, do you text handling here
+  //       }
+  //     });
+  //     // const temp = JSON.stringify(encrypted);
+  //     // console.log(temp);
+  //     // console.log(encrypted);
+  //     console.log("Judiciary Data");
+  //     console.log(ipfsData);
+  //     const decryptMessage = await EthCrypto.decryptWithPrivateKey(privateKey, JSON.parse(ipfsData));
+  //     console.log("decryptMessage in judiciary "+decryptMessage);
+  //
+  //
+  // res.send({"success":"success", "decryptMessage":decryptMessage});
+})
+
 router.post('/removeJudiciary', function (req, res, next) {
 	console.log(req.body);
 	var judiciaryDetails = req.body;
@@ -305,25 +434,194 @@ router.get('/profile', function (req, res, next) {
 
 
 
-router.post('/addEmail',   function(req,res,next) {
-  var url = req.body.url;
-  console.log(url);
-  //temporary one
-const message = url;
-const msgHash = EthCrypto.hash.keccak256(message);
+router.post('/addEmail', async function(req,res,next)
+{
+  console.log("hi");
+  var fileData = req.files.file.data;
+  console.log("--------------------------------------------------------");
+  console.log(req.body.pvt);
+
+  var privateKey = req.body.pvt;
+  // console.log(fileData.toString('utf8'));
+  var eml = fileData.toString('utf8');
+  emlformat.read(eml, async function(error, data)
+  {
+      if (error) return console.log(error);
+      var timeStamp = data["headers"]["Date"];
+      var messageId = data["headers"]["Message-ID"];
+      var email = data["from"]["email"];
+      console.log("=> "+timeStamp + " " + messageId + " " + email );
+
+      // privateKey = '92f9e4472d62fe3c0f7ebf082b0a8dfb727ee0967dc5b1e3c38608923da8d736';
+
+      //encrypt with private key of user
+      const publicKey = await EthCrypto.publicKeyByPrivateKey(privateKey);
+      fileData = "Temporary Email Data to be encrypted";
+      const encryptedLayerOne = await EthCrypto.encryptWithPublicKey(publicKey, fileData);
+      // console.log(encrypted);
+
+      //encrypt with private key of admin
+      // const adminPrivateKey = "72d76bdfd8c33cb0a429ffc3abd9ac120da2913eb06328fbf7b0a042b3515e3c";
+      // const adminPublicKey = await EthCrypto.publicKeyByPrivateKey(adminPrivateKey);
+      const encryptedLayerTwo = encryptedLayerOne;
+      // = await EthCrypto.encryptWithPublicKey(adminPublicKey, encryptedLayerOne);
+      console.log("encrypted layer two : " + JSON.stringify(encryptedLayerTwo));
+
+      console.log("====================================================================");
+      const buf = Buffer.from(JSON.stringify(encryptedLayerTwo), "utf-8");
 
 
-const publicKey = EthCrypto.publicKeyByPrivateKey(
-     'b8d6067b4b4280913872fe826cdec4dc0179009f9c3432f72074e77189b58c37'
- );
- console.log("public key "+publicKey);
-
- const address = EthCrypto.publicKey.toAddress(
-      publicKey
+      const message = encryptedLayerTwo;
+  const messageHash = EthCrypto.hash.keccak256(message);
+  const signature = EthCrypto.sign(
+      '92f9e4472d62fe3c0f7ebf082b0a8dfb727ee0967dc5b1e3c38608923da8d736', // privateKey
+      messageHash // hash of message
   );
-  
- console.log("address "+address);
-res.send({"success":"Sucsess","timeStamp":"timeStampt", "messageId":"messageIdt", "email":"emailt"});
+ console.log("signature : " + signature);
+const jsonObject = {"signature" : signature, "encryptedData" : JSON.stringify(encryptedLayerTwo)};
+const buf1 = Buffer.from(JSON.stringify(jsonObject), "utf-8");
+
+  const signer = EthCrypto.recover(
+     signature,
+     EthCrypto.hash.keccak256(message) // signed message hash
+ );
+console.log("signer : " + signer);
+
+//  const signer1 = EthCrypto.recoverPublicKey(
+//      '0xc04b809d8f33c46ff80c44ba58e866ff0d5..', // signature
+//      EthCrypto.hash.keccak256('foobar') // message hash
+//  );
+// console.log(signer1);
+  // JSON.stringify({"Data":"data1"}), "utf-8");
+
+      var hash = "null";
+      ipfs.files.add(buf1, async (err, result) =>
+      {
+        if(err)
+        {
+          console.error(err)
+          return
+        }
+        console.log(result);
+        hash = result[0].hash;
+        console.log(result[0].hash);
+        //in judiciary
+          var url =  'https://ipfs.io/ipfs/'+hash;
+          console.log(url);
+          var ipfsData = "";
+          let qwe = await fetch(url)
+            .then(response => response.text())
+            .then(text => {
+              console.log("in fetch");
+              try {
+                ipfsData = text;
+                  console.log(text);
+              } catch(err) {
+                console.log(err);
+                 // It is text, do you text handling here
+              }
+          });
+        // const temp = JSON.stringify(encrypted);
+        // console.log(temp);
+        // console.log(encrypted);
+        console.log("ipfsDAta");
+        console.log(ipfsData);
+
+        const ipfsJson = JSON.parse(ipfsData);
+
+        console.log(ipfsJson.signature);
+        const decryptMessage = await EthCrypto.decryptWithPrivateKey(privateKey, JSON.parse(ipfsJson.encryptedData));
+        console.log("decryptMessage =========================================================="+decryptMessage);
+        // url = "url";
+        res.send({"success":"Success", "timeStamp":timeStamp,
+                  "messageId":messageId, "email":email, "url": url});
+    });
+  //var url = 'https://ipfs.infura.io:5001/api/v0/object/get?arg='+hash;
+//
+//   fetch(url).then(response =>
+//     response.json().then(data => ({
+//         data: data,
+//         status: response.status
+//     })
+// ).then(res => {
+//     console.log(res.status, res.data);
+//     // console.log(res.data.map(b => String.fromCharCode(b)).join(""));
+// }));
+
+  // request.get(url, function (error, response, body) {
+  //     if (!error && response.statusCode == 200)
+  //     {
+  //         var eml = body;
+  //         console.log(body);
+  //         body.json();
+  //         console.log(body.Data);
+  //     }
+  // });
+
+
+
+
+// Qmc3LfCheSmJw5Y6EzxCNosoawStMxzQnHvxK3uqDGDgV4
+// Qmc3LfCheSmJw5Y6EzxCNosoawStMxzQnHvxK3uqDGDgV4
+// QmSbC3bS4DH9QQXrxyZygbptuqjkvk7EzEuwa8yLbbxea9
+
+// https://ipfs.infura.io:5001/api/v0/object/get?arg=QmSbC3bS4DH9QQXrxyZygbptuqjkvk7EzEuwa8yLbbxea9
+// var url =  'https://ipfs.infura.io:5001/api/v0/object/get?arg='+hash;
+// request.get(url, function (error, response, body) {
+//     if (!error && response.statusCode == 200)
+//     {
+//         var eml = body;
+//
+//     }
+// });
+//
+//        decryptMessage = await EthCrypto.decryptWithPrivateKey(privateKey, encrypted);
+      // console.log(decryptMessage);
+
+      // res.send({"success":"Success", "timeStamp":timeStamp,
+                // "messageId":messageId, "email":email});
+  });//eml parsing
+
+//get pvt key from front encrypted end
+//encryption
+//ipfs
+//send url to front end
+
+  // res.send();
+  // res.send({"path":"s"});
+  // res.send({"Success" : "success"});
+ // const path = __dirname + '/images/' + fileName
+
+//previous ----------------------------------------------
+  // var url = req.body.url;
+  // var privateKey = req.body.privateKey;
+  // console.log(url + " " + privateKey);
+// 0xF48017c24fe0513545E25d314fFcc16209fAdA4E
+
+// const publicKey = EthCrypto.publicKeyByPrivateKey(privateKey);
+//
+//  const encrypted = await EthCrypto.encryptWithPublicKey(
+//         publicKey, // publicKey
+//         url // message
+//     );
+// console.log(encrypted);
+
+    // const message = await EthCrypto.decryptWithPrivateKey(
+    //       '92f9e4472d62fe3c0f7ebf082b0a8dfb727ee0967dc5b1e3c38608923da8d736', // privateKey
+    //       {
+    //           iv: '02aeac54cb45283b427bd1a5028552c1',
+    //           ephemPublicKey: '044acf39ed83c304f19f41ea66615d7a6c0068d5fc48ee181f2fb1091...',
+    //           ciphertext: '5fbbcc1a44ee19f7499dbc39cfc4ce96',
+    //           mac: '96490b293763f49a371d3a2040a2d2cb57f246ee88958009fe3c7ef2a38264a1'
+    //       } // encrypted-data
+    //   );
+
+ // const address = EthCrypto.publicKey.toAddress(
+ //      publicKey
+ //  );
+
+ // console.log("address "+address);
+// res.send({"success":"Sucsess","timeStamp":"timeStampt", "messageId":"messageIdt", "email":"emailt"});
 //uncomment
   // request.get(url, function (error, response, body) {
   //     if (!error && response.statusCode == 200)
@@ -345,6 +643,17 @@ res.send({"success":"Sucsess","timeStamp":"timeStampt", "messageId":"messageIdt"
   // });
 //uncomment
 });
+
+// fs.readFile(fileName, function(err, data) {
+//     if (err) {
+//       console.log("-----------------------------------------------hii-------------------------------------------------------------");
+//       console.log(err);
+//       console.log("-----------------------------------------------------------------");
+//     }
+//     else
+//     console.log(data);
+// });
+
 
 router.get('/addEmail',function(req,res,next){
 

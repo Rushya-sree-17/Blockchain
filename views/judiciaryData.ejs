@@ -16,7 +16,47 @@
 				 var content = document.getElementById("content"+rowId).innerHTML;
 				 console.log(content);
 
-				 alert("Data : "+content );
+		 		 	window.location.href = '/decryptPageJud';
+
+
+				 var privateKey = prompt("Please enter your privateKey", "private key");
+				 var privateKeyjson = {"privateKey" : privateKey, "url":content};
+				 console.log(privateKeyjson);
+				 $.post("/judiciaryData",
+						 privateKeyjson,
+						 function(data, status)
+						 {
+							 // if(status === "success")
+							 // {
+								//  console.log("successs");
+								//  console.log(data.decryptMessage);
+								//  // alert("xyz");
+								//  var dat = data.decryptMessage;
+								//  alert("Mail Content : " + dat);
+							 // }
+							 // else{
+								//  console.log("error in post");
+							 // }
+						 }
+				 );
+
+				 // $.ajax({
+				 //        url : '/judiciaryData',
+				 //        type : 'POST',
+				 //        data : privateKeyjson,
+				 //        contentType: JSON,
+					// 			success: function(response){
+					// 				console.log(response);
+					// 			}
+					// 		});
+
+
+			  // if (person != null) {
+			  //   document.getElementById("demo").innerHTML =
+			  //   "Hello " + person + "! How are you today?";
+			  // }
+
+				 // alert("Data : "+content );
 			 }
 	</script>
 </head>
@@ -49,13 +89,13 @@
 		</div>
 
 	</div>
-	<div class="col-md-0 col-md-offset-2">
-	<div style="height:200px; overflow-y: scroll;width:800px;">
+	<div class="col-md-0 col-md-offset-1">
+	<div style="height:300px; overflow-y: scroll;width:1000px;">
 		<center>
 		<table class="table table-hover text-center" >
 			<tr>
 				<th><center>S.No</center></th>
-				<th><center>Unique Email Id</center></th>
+				<!-- <th><center>Unique Email Id</center></th> -->
 				<th><center>Message Id</center></th>
 				<th><center>User Id</center></th>
 				<th><center>Email Time Stamp</center></th>
@@ -65,8 +105,9 @@
 			<% for(var i=0; i < emailRequestData.length; i++) { %>
 				<tr id="<%=i+1%>">
 					<td><%= i+1 %></td>
-					<td><%= emailRequestData[i].uniqueMailId %></td>
-					<td><%= emailRequestData[i].messageId %></td>
+					<!-- <td><%= emailRequestData[i].uniqueMailId %></td> -->
+					<!-- <td><%= emailRequestData[i].messageId %></td> -->
+					<td>hi</td>
 					<td><%= emailRequestData[i].userId %></td>
 					<td><%= emailRequestData[i].emailTimeStamp %></td>
 					<td><%= emailRequestData[i].currTimeStamp %></td>
@@ -74,10 +115,23 @@
 						<% if(emailRequestData[i].content == "") { %>
 							Content not yet received
 						<% } else { %>
-						<a href="<%= emailRequestData[i].content %>"> click here</a>
+							<!-- <a href="/decryptPage">click here</a> -->
+						<!-- <a href="<%= emailRequestData[i].content %>"> click here</a> -->
 						<% } %>
-						<!-- <button id = "button<%= i+1 %>" onclick="showData()">Search</button>
-						<h5 hidden id="content<%=i+1%>" ><%= emailRequestData[i].content %></h5> -->
+
+						<!-- <p id="popUp"></p> -->
+						<!-- <a href="/decryptPageJud/<%= emailRequestData[i].content %>">decrypt</a> -->
+						<!-- <button id = "button<%= i+1 %>" onclick="showData()">Search</button> -->
+						<!-- <h5 hidden id="content<%=i+1%>" ><%= emailRequestData[i].content %></h5> -->
+
+						<div class="form-group">
+							<form  action="/judiciaryData" method="post">
+								<!-- <button id = "button<%= i+1 %>" onclick="showData()">Search</button> -->
+								<h5 hidden id="content<%=i+1%>" ><%= emailRequestData[i].content %></h5>
+								<input type="url" name="url" value="<%= emailRequestData[i].content %>" hidden >
+								<input type="submit" name="submit" value="See Content">
+							</form>
+						</div>
 					</td>
 					<!-- <td><%= emailRequestData[i].status %></td> -->
 					<!-- <td><a href="/decryptPage/<%= emailRequestData[i].uniqueMailId%>">click here</a></td> -->

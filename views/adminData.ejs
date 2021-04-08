@@ -205,6 +205,7 @@ var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) 
 			<td class="row-data"><%= emailRequestData[i].currTimeStamp %></td>
     		<td>
 			<% if(emailRequestData[i].status==="Pending") { %>
+				
 				<button id = "button<%= i+1 %>" onclick="show()">Search</button>
 				<!-- <input type="button"  value="submit" onclick="show()" /></td> -->
 			<!-- <a href="/searchMail/<%= emailRequestData[i].uniqueMailId %>">Search</a> -->
