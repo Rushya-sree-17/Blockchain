@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Decrypt Page</title>
+  </head>
+  <body>
+    <div class="form-group">
+<a id="url"><%= url %></a>
+
+      <form class="" action="/decryptPageJud" method="post">
+
+        <input type="password" name="privateKey" id="privateKey" value="" placeholder="Enter Private Key">
+        <input type="submit" name="submit" value="submit">
+        <input type="url" name="url" value="<%= url%>" hidden>
+        <!-- <button type="button" name="button" onclick="seeContent()">See Mail Content</button> -->
+      </form>
+    </div>
+
+  </body>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="./css/main.css">
+
+  <script type="text/javascript">
+    function seeContent() {
+
+    }
+  </script>
+</html>

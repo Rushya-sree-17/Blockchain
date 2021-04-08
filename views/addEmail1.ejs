@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<title>Document</title>
+
+<link rel="stylesheet" type="text/css" href="./css/main.css">
+<script src="web3.min.js"></script>
+<script src="ipfs.min.js"></script>
+</head>
+
+<body>
+  <div class="col-md-6 col-md-offset-5">
+  <div style='float: right;' >
+    <a href="/logout">Logout</a>
+  </div>
+  </div>
+ <div class="container">
+
+<h1>Add Email</h1>
+
+<!-- <form  method="post" enctype="multipart/form-data" action="/a">
+  <input type="file" name="filename" >
+  <input type="submit" value="upload">
+
+</form> -->
+
+<input type="file" id="file"/>
+<button id="send-file">Send</button>
+
+<!-- <label for="name" class="col-lg-2 control-label">Content</label>
+ <input id="content" type="text">
+
+<label for="name" class="col-lg-2 control-label">Message ID</label>
+ <input id="messageId" type="text">
+
+ <label for="name" class="col-lg-2 control-label">TimeStamp</label>
+  <input id="timeStamp" type="text">
+
+ <input name="file" id ="file" type="file" /> -->
+
+
+
+
+  <!-- <p><input type="file"  accept="image/*" name="image" id="file"   style="display: none;"></p>
+  <p><label for="file" style="cursor: pointer;">Upload Image</label></p>
+  <p><img id="output" width="200" /></p> -->
+
+
+   <!-- <input id="userEmailId" type="text" value = <%=data.email %> hidden >
+<button id="button" >Update  </button> -->
+
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<!-- <script src="ipfs.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+</script>
+
+<script>
+
+const ipfs = IpfsApi('ipfs.infura.io', '5001', {protocol: 'https'})
+
+ // future code goes here
+ if (typeof web3 !== "undefined")
+{
+ web3 = new Web3(web3.currentProvider);
+ }
+else
+{
+ // set the provider you want from Web3.providers
+web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+ }
+
+ //web3.eth.defaultAccount = web3.eth.accounts[0];
+
+ var request = new XMLHttpRequest();
+ request.open("GET", "contracts.txt", false);
+ request.send(null);
+ var contractDetails = JSON.parse(request.responseText);
+var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) );
+
+
+var send_file = $("#send-file");
+send_file.on("click", function(e) {
+    //file
+    var file = $("#file")[0].files[0];
+    //formdata
+    var fd = new FormData();
+    fd.append("file", file, "file_name");
+    //send file
+    $.ajax({
+            url: '/upload',
+            data: fd,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST'
+        })
+        .done(function(data) {
+            console.log(data);
+            console.log("Upload successfully");
+        });
+});
+// return false;});
+
+ $("#button").click(async function() {
+   // console.log($('#file').files[0]);
+
+  // var image = document.getElementById('output');
+  // image.src = URL.createObjectURL(document.getElementById('file').files[0]);
+
+var jsonTemp = {"content":$('#content').val()};
+var hash = "unset";
+console.log($('#file'));
+
+
+// let testBuffer = jsonTemp;
+//  // new Buffer(jsonTemp);
+//
+// ipfs.files.add(testBuffer, function (err, file) {
+//         if (err) {
+//           console.log(err);
+//         }else{
+//           res.send({"Success":"done","EmailHash":file[0].hash});
+//         }
+//         console.log(file);
+//         console.log("hash = "+file[0].hash);
+//       })
+
+
+   //----------------------------------------post
+console.log(($('#content').val())+"-----------------------");
+console.log($('#file'));
+var fileToBeSent = document.getElementById('file').files[0]
+console.log(fileToBeSent);
+// fetch('/addEmail', {
+//   method: 'POST',
+//   body: $('#file'),
+// }).then((response) => {
+//   console.log(response);
+// })
+//----------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------
+
+// var formData = new FormData();
+// // var data = new FormData();
+// jQuery.each(jQuery('#file')[0].files, function(i, file) {
+//     formData.append('file-'+i, file);
+// });
+//    				$.ajax({
+//    					type: 'POST',
+//    					url: '/addEmail',
+//    					// data: jsonTemp,
+//             data: formData,
+//    					// dataType: "json",
+//             contentType: 'multipart/form-data',
+//             processData: false,
+//             // contentType: false,
+//    					success: function(response){
+//         			if (response.Success=="done")
+//               {
+//                 console.log("posted");
+//                 hash = response.EmailHash;
+//
+//                 var accounts = web3.eth.getAccounts((error,result) => {
+//                        if (error)
+//                        {
+//                          console.log(error);
+//                        }
+//                        else
+//                        {
+//                          console.log("accounts "+result);
+//                          console.log("hash - "+hash);
+//                          Courses.methods.generateTransaction(hash, $("#messageId").val(),
+//                          $("#timeStamp").val(), $("#userEmailId").val()).send(
+//                          {from: result[0], gas:3000000}, function(error, transactionHash)
+//                           {
+//                             if(!error)
+//                             {
+//                               console.log(hash);
+//                               console.log($("#messageId").val());
+//                               console.log($("#timeStamp").val());
+//                               console.log($("#userEmailId").val());
+//                               console.log("updated");
+//                               location.reload();
+//                             }
+//                             else
+//                             {
+//                               console.log(error);
+//                             }
+//                          });
+//                        }
+//                 });
+//
+//
+//         			}; // if
+//             },
+//             error: function() {}
+//       })
+//----------------------------------------------------
+
+// location.reload();
+
+// });
+ </script>
+
+</body>
+</html>

@@ -1,11 +1,12 @@
 [
+
 [
 	{
 		"constant": false,
 		"inputs": [
 			{
 				"internalType": "string",
-				"name": "_content",
+				"name": "_hash",
 				"type": "string"
 			},
 			{
@@ -94,7 +95,7 @@
 		"outputs": [
 			{
 				"internalType": "string",
-				"name": "content",
+				"name": "hash",
 				"type": "string"
 			},
 			{
@@ -118,7 +119,8 @@
 		"type": "function"
 	}
 ]
+
   ,
 
-    "0x59b35CcCF415A181240b81B3FCe17B6DF447d3F7"
+    "0x9Ed9bCd1190C8e147261F79432B4dfFA45838ee1"
  ]
