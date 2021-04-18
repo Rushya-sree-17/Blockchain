@@ -15,10 +15,27 @@ const buffer = require('buffer');
 const fileupload = require('express-fileupload');
 const fetch = require("node-fetch");
 const utf8 = require('utf8');
+var Web3 = require('web3');
 const https = require('https');
+const crypto = require('crypto');
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var randomstring = require("randomstring");
 //...
 router.use(fileupload(), busboy());
 
+function encrypt(text, password){
+  var cipher = crypto.createCipher('aes-256-ctr',password)
+  var crypted = cipher.update(text,'utf8','hex')
+  crypted += cipher.final('hex');
+  return crypted;
+}
+
+function decrypt(text, password){
+  var decipher = crypto.createDecipher('aes-256-ctr',password)
+  var dec = decipher.update(text,'hex','utf8')
+  dec += decipher.final('hex');
+  return dec;
+}
 
 var storage	=	multer.diskStorage({
   destination: function (req, file, callback) {
@@ -131,10 +148,13 @@ router.post('/decryptPageAdmin', async function (req, res, next){
     console.log(req.body.url);
     console.log(req.body.privateKey);
 
-    var privateKey = req.body.privateKey;
+    var emailUniqueId = req.body.uniqueMailId;
+    console.log("emailUniqueId");
+    console.log(emailUniqueId);
+    var adminPrivateKey = req.body.privateKey;
     var url = req.body.url;
 
-      const publicKey = await EthCrypto.publicKeyByPrivateKey(privateKey);
+      const publicKey = await EthCrypto.publicKeyByPrivateKey(adminPrivateKey);
 
       var ipfsData = "";
       let qwe = await fetch(url)
@@ -151,37 +171,354 @@ router.post('/decryptPageAdmin', async function (req, res, next){
         // const temp = JSON.stringify(encrypted);
         // console.log(temp);
         // console.log(encrypted);
-        console.log("Admin Data");
+        console.log("Admin Data encryption layer");
         console.log(ipfsData);
-        const decryptMessage = await EthCrypto.decryptWithPrivateKey(privateKey, JSON.parse(ipfsData));
-        console.log("decryptMessage in Admin " + decryptMessage);
+
+
+        const ipfsJson = JSON.parse(ipfsData);
+        console.log(ipfsJson);
+
+        const decryptDataAdminLayer = await EthCrypto.decryptWithPrivateKey(adminPrivateKey, (ipfsJson));
+        console.log("decryptDataAdminLayer ------------------- "  + (decryptDataAdminLayer) );
+
+
+        //-----------------------------------------------
+        const buf = Buffer.from((decryptDataAdminLayer), "utf-8");
+
+        ipfs.files.add(buf, async (err, result) =>
+        {
+          if(err)
+          {
+            console.error(err)
+            return
+          }
+          console.log(result);
+          hash = result[0].hash;
+          console.log(result[0].hash);
+          //in judiciary
+            var url =  'https://ipfs.io/ipfs/'+hash;
+            console.log(url);
+
+
+
+            var statusToBeUpdated = "Mail Sent to judiciary";
+            EmailRequest.updateOne({"uniqueMailId" : emailUniqueId},{"status" : statusToBeUpdated,"content":url},function(err){
+            	if(err){
+            		console.log(err);
+            	}else{
+            		console.log("Success");
+                res.redirect("/profile");
+                // res.send("success");
+            	}
+            });
+
+
+            // var ipfsData = "";
+            // let qwe = await fetch(url)
+            //   .then(response => response.text())
+            //   .then(text => {
+            //     console.log("in fetch");
+            //     try {
+            //       ipfsData = text;
+            //         console.log(text);
+            //     } catch(err) {
+            //       console.log(err);
+            //        // It is text, do you text handling here
+            //     }
+            // });
+
+            // res.send({"success":"Success", "timeStamp":timeStamp,
+                    // "messageId":messageId, "email":email, "url": url});
+      });
+
+      // const ipfsJson = JSON.parse(ipfsData);
+      // const decryptDataAdminLayer = await EthCrypto.decryptWithPrivateKey(adminPrivateKey, JSON.parse(ipfsJson));
+      //
+      // // const ipfsJsonUserLayer = JSON.parse(decryptDataAdminLayer);
+      // // console.log(ipfsJsonUserLayer.signature);
+      // // const decryptMessage = await EthCrypto.decryptWithPrivateKey(privateKeyUser, JSON.parse(ipfsJsonUserLayer.encryptedData));
+      // console.log("decryptMessage =========================================================="+decryptDataAdminLayer);
+
 
 
 });
 
-router.post('/adminData', function (req, res, next) {
-	console.log("req body");
-	console.log(req.body);
-	var emailUniqueId = req.body.uniqueMailId;
-	var content = req.body.emailContent; // url
 
-res.render('decryptPageAdmin.ejs', {url:req.body.url});
 
-	var statusToBeUpdated = "Mail Sent to judiciary";
-console.log(emailUniqueId);
-if(content === "Invalid request")
+// router.post('/adminData', async function (req, res, next) {
+// 	console.log("req body");
+// 	console.log(req.body);
+// 	var emailUniqueId = req.body.uniqueMailId;
+// 	var content = req.body.emailContent; // url
+// console.log("hii");
+// return res.render('decryptPageAdmin.ejs', {url:content});
+// //
+// // 	var statusToBeUpdated = "Mail Sent to judiciary";
+// // console.log(emailUniqueId);
+// // if(content === "Invalid request")
+// // {
+// // 	statusToBeUpdated = "Invalid request";
+// // }
+// // EmailRequest.updateOne({"uniqueMailId" : emailUniqueId},{"status" : statusToBeUpdated,"content":content},function(err){
+// // 	if(err){
+// // 		console.log(err);
+// // 	}else{
+// // 		console.log("Success");
+// // 	}
+// // });
+//
+// });
+
+
+router.post('/adminData', async function (req, res, next){
+  // console.log(req.body.privateKey);
+  // console.log(req.body.url);
+  console.log("post admin data");
+  console.log(req.body.emailContent);
+  console.log(req.body.timeStamp);
+  console.log(req.body.messageId);
+// res.redirect('/decryptPageJud');
+var msgId = req.body.messageId;
+var timeStamp = req.body.timeStamp;
+var uniqueMailId = req.body.uniqueMailId;
+
+// console.log("hiiiiiiiiiiiiiii " + timeStamp);
+// ethereum.enable();
+if (typeof web3 !== "undefined")
 {
-	statusToBeUpdated = "Invalid request";
+  web3 = new Web3(web3.currentProvider);
 }
-EmailRequest.updateOne({"uniqueMailId" : emailUniqueId},{"status" : statusToBeUpdated,"content":content},function(err){
-	if(err){
-		console.log(err);
-	}else{
-		console.log("Success");
-	}
-});
+else
+{
+// set the provider you want from Web3.providers
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+}
 
+// var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) );
+
+
+
+var Courses =  new web3.eth.Contract(
+[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_hash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_messageId",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_timeStamp",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_userEmailId",
+				"type": "string"
+			}
+		],
+		"name": "generateTransaction",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "transCount",
+				"type": "uint256"
+			}
+		],
+		"name": "getTransaction",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "transactionsCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "transactionsMap",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "hash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "messageId",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "timeStamp",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "userEmailId",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+],   "0x8E04c4DE2dFA29cA8Ef2F8E90B7c7cb84391Fc08" );
+var hash = "not set";
+console.log("Msg id : " + msgId + " ||||| timeStamp : " + timeStamp);
+
+var accounts = await web3.eth.getAccounts(async (error,result) => {
+  // console.log(result);
+       if (error)
+       {
+         console.log(error);
+       }
+       else
+       {
+
+         // var transCount = web3.eth.getTransactionCount(web3.eth.defaultAccount, async function(err, counts){
+         console.log("result 0 : ");
+         // console.log(result[0]);
+
+         var transCount = await web3.eth.getTransactionCount(result[0], async function(err, counts){
+           if(!err)
+           {
+             var flag = 0;
+             for( var i = 1; i<counts; i++)
+             {
+               Courses.methods.getTransaction(i)
+               .call({from: result[0]},
+                 async function(error, emailTransaction)
+                 {
+                     if(!error)
+                     {
+                       if(emailTransaction[1] === msgId && emailTransaction[2] === timeStamp)
+                       {
+                         // console.log(emailTransaction);
+                            flag = 1;
+                            // console.log("flag " + flag);
+                            // content = emailTransaction[0]; //content here is hash value
+                            hash = emailTransaction[0];
+
+                            // break;
+                            console.log(i + " * " + counts);
+                            if(i === counts )
+                            {
+                              console.log("hiiiiii " + i);
+                                if(flag === 0)
+                                {
+                                  hash = "Invalid request";
+                                  console.log("not  found");
+                                }
+                                console.log("Email transaction found with hash : " + hash);
+                                console.log(hash);
+                                console.log(msgId);
+                                res.render('decryptPageAdmin.ejs', {url:hash, uniqueMailId:uniqueMailId});
+                            }
+                       }
+                     }
+                     else
+                     {console.log(error);}
+                 });//get method
+                 // console.log(i + " - " + flag);
+             }
+           }
+           else
+            {console.log(err);}
+         });
+
+       }
 });
+console.log("URL IPFS = " + hash);
+
+// res.render('decryptPageAdmin.ejs', {url:hash});
+
+console.log("hii");
+
+  // res.send('/decryptPageJud.ejs',{'url':req.body.url});
+// res.sendFile(path.join(__dirname+'/decryptPageJud'));
+  // var privateKey = req.body.privateKey;
+  // var url = req.body.url;
+  //
+  //   const publicKey = await EthCrypto.publicKeyByPrivateKey(privateKey);
+  //
+  //   var ipfsData = "";
+  //   let qwe = await fetch(url)
+  //     .then(response => response.text())
+  //     .then(text => {
+  //       try {
+  //         ipfsData = text;
+  //           // console.log(text);
+  //       } catch(err) {
+  //         console.log(err);
+  //          // It is text, do you text handling here
+  //       }
+  //     });
+  //     // const temp = JSON.stringify(encrypted);
+  //     // console.log(temp);
+  //     // console.log(encrypted);
+  //     console.log("Judiciary Data");
+  //     console.log(ipfsData);
+  //     const decryptMessage = await EthCrypto.decryptWithPrivateKey(privateKey, JSON.parse(ipfsData));
+  //     console.log("decryptMessage in judiciary "+decryptMessage);
+  //
+  //
+  // res.send({"success":"success", "decryptMessage":decryptMessage});
+})
 
 
 
@@ -291,8 +628,17 @@ router.post('/decryptPageJud', async function(req, res, next){
 
   var privateKey = req.body.privateKey;
   var url = req.body.url;
+  var publicKey;
 
-    const publicKey = await EthCrypto.publicKeyByPrivateKey(privateKey);
+try {
+   publicKey = await EthCrypto.publicKeyByPrivateKey(privateKey);
+} catch (e) {
+  console.log(e);
+  res.send("Incorrect Private Key");
+} finally {
+
+}
+
 
     var ipfsData = "";
     let qwe = await fetch(url)
@@ -311,11 +657,25 @@ router.post('/decryptPageJud', async function(req, res, next){
       // console.log(encrypted);
       console.log("Judiciary Data");
       console.log(ipfsData);
-      const decryptMessage = await EthCrypto.decryptWithPrivateKey(privateKey, JSON.parse(ipfsData));
+      var ipfsJson = JSON.parse(ipfsData);
+      const decryptMessage = await EthCrypto.decryptWithPrivateKey(privateKey, ipfsJson.encryptedData);
       console.log("decryptMessage in judiciary "+decryptMessage);
 
+       publicKey = EthCrypto.publicKeyByPrivateKey(privateKey);
+       var address = EthCrypto.publicKey.toAddress(publicKey);
 
-  res.send({"success":"success", "decryptMessage":decryptMessage});
+      var signer = EthCrypto.recover(
+         ipfsJson.signature,
+         EthCrypto.hash.keccak256(ipfsJson.encryptedData) // signed message hash
+     );
+    console.log("signer : " + signer);
+    var validation = "Corrupted Email";
+    if(address === signer)
+    {
+      validation = "Validation Successful";
+    }
+  res.render("validationPage.ejs",{"success":"success", "decryptMessage":decryptMessage,
+                "signer":signer, "address":address, "validation":validation});
 
 })
 
@@ -386,8 +746,8 @@ router.get('/searchMail/:id',function(req,res,next){
 
 			console.log(err);
 		}else{
-			console.log("Success");
-			// res.redirect("/profile");
+			// console.log("Success");
+			res.redirect("/profile");
 		}
 	});
 });
@@ -441,7 +801,7 @@ router.post('/addEmail', async function(req,res,next)
   console.log("--------------------------------------------------------");
   console.log(req.body.pvt);
 
-  var privateKey = req.body.pvt;
+  var privateKeyUser = req.body.pvt;
   // console.log(fileData.toString('utf8'));
   var eml = fileData.toString('utf8');
   emlformat.read(eml, async function(error, data)
@@ -454,38 +814,80 @@ router.post('/addEmail', async function(req,res,next)
 
       // privateKey = '92f9e4472d62fe3c0f7ebf082b0a8dfb727ee0967dc5b1e3c38608923da8d736';
 
-      //encrypt with private key of user
-      const publicKey = await EthCrypto.publicKeyByPrivateKey(privateKey);
-      fileData = "Temporary Email Data to be encrypted";
-      const encryptedLayerOne = await EthCrypto.encryptWithPublicKey(publicKey, fileData);
+      //encrypt with public key of user - Layer 1
+      const publicKeyUser = await EthCrypto.publicKeyByPrivateKey(privateKeyUser);
+      // fileData = "Temporary Email Data to be encrypted";
+      console.log(fileData);
+      const encryptedLayerOne = await EthCrypto.encryptWithPublicKey(publicKeyUser, fileData);
+
+      const decryptDataAdminLayer1 = await EthCrypto.decryptWithPrivateKey(privateKeyUser, (encryptedLayerOne));
+      console.log("decryptData user Layer ============================ "  + JSON.stringify(decryptDataAdminLayer1) );
+
+
       // console.log(encrypted);
 
-      //encrypt with private key of admin
-      // const adminPrivateKey = "72d76bdfd8c33cb0a429ffc3abd9ac120da2913eb06328fbf7b0a042b3515e3c";
-      // const adminPublicKey = await EthCrypto.publicKeyByPrivateKey(adminPrivateKey);
-      const encryptedLayerTwo = encryptedLayerOne;
-      // = await EthCrypto.encryptWithPublicKey(adminPublicKey, encryptedLayerOne);
-      console.log("encrypted layer two : " + JSON.stringify(encryptedLayerTwo));
+      //Signing by User
+      const message = encryptedLayerOne;
+      const messageHash = EthCrypto.hash.keccak256(message);
+      const signature = EthCrypto.sign(
+        privateKeyUser, // privateKey
+        messageHash // hash of message
+      );
+
+      console.log("signature : " + signature);
+      const jsonObjectAfterSigning = {"signature" : signature, "encryptedData" : encryptedLayerOne};
+
+//testing
+      const signer = EthCrypto.recover(
+         signature,
+         EthCrypto.hash.keccak256(message) // signed message hash
+     );
+    console.log("signer : " + signer);
+//testing
+
+      //encrypt with public key of admin
+      const adminPrivateKey = "72d76bdfd8c33cb0a429ffc3abd9ac120da2913eb06328fbf7b0a042b3515e3c";
+      const adminPublicKey = await EthCrypto.publicKeyByPrivateKey(adminPrivateKey);
+
+console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      console.log((jsonObjectAfterSigning));
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      console.log(JSON.stringify(jsonObjectAfterSigning));
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+      const encryptedLayerTwo = await EthCrypto.encryptWithPublicKey(adminPublicKey, JSON.stringify(jsonObjectAfterSigning) );
+
+      const decryptDataAdminLayer = await EthCrypto.decryptWithPrivateKey(adminPrivateKey, (encryptedLayerTwo));
+      console.log("decryptDataAdminLayer ============================ "  + (decryptDataAdminLayer) );
+
 
       console.log("====================================================================");
       const buf = Buffer.from(JSON.stringify(encryptedLayerTwo), "utf-8");
 
 
-      const message = encryptedLayerTwo;
-  const messageHash = EthCrypto.hash.keccak256(message);
-  const signature = EthCrypto.sign(
-      '92f9e4472d62fe3c0f7ebf082b0a8dfb727ee0967dc5b1e3c38608923da8d736', // privateKey
-      messageHash // hash of message
-  );
- console.log("signature : " + signature);
-const jsonObject = {"signature" : signature, "encryptedData" : JSON.stringify(encryptedLayerTwo)};
-const buf1 = Buffer.from(JSON.stringify(jsonObject), "utf-8");
 
-  const signer = EthCrypto.recover(
-     signature,
-     EthCrypto.hash.keccak256(message) // signed message hash
- );
-console.log("signer : " + signer);
+
+      //encrypt with private key of admin
+      // const adminPrivateKey = "72d76bdfd8c33cb0a429ffc3abd9ac120da2913eb06328fbf7b0a042b3515e3c";
+      // const adminPublicKey = await EthCrypto.publicKeyByPrivateKey(adminPrivateKey);
+      // const encryptedLayerTwo = encryptedLayerOne;
+      // = await EthCrypto.encryptWithPublicKey(adminPublicKey, encryptedLayerOne);
+      // console.log("encrypted layer two : " + JSON.stringify(encryptedLayerTwo));
+
+      // const buf = Buffer.from(JSON.stringify(encryptedLayerTwo), "utf-8");
+
+
+      // const message = encryptedLayerTwo;
+      // const messageHash = EthCrypto.hash.keccak256(message);
+      // const signature = EthCrypto.sign(
+      //   '92f9e4472d62fe3c0f7ebf082b0a8dfb727ee0967dc5b1e3c38608923da8d736', // privateKey
+      //   messageHash // hash of message
+      // );
+      // console.log("signature : " + signature);
+      // const jsonObject = {"signature" : signature, "encryptedData" : JSON.stringify(encryptedLayerTwo)};
+      // const buf1 = Buffer.from(JSON.stringify(jsonObject), "utf-8");
+
+
 
 //  const signer1 = EthCrypto.recoverPublicKey(
 //      '0xc04b809d8f33c46ff80c44ba58e866ff0d5..', // signature
@@ -495,7 +897,7 @@ console.log("signer : " + signer);
   // JSON.stringify({"Data":"data1"}), "utf-8");
 
       var hash = "null";
-      ipfs.files.add(buf1, async (err, result) =>
+      ipfs.files.add(buf, async (err, result) =>
       {
         if(err)
         {
@@ -524,15 +926,30 @@ console.log("signer : " + signer);
         // const temp = JSON.stringify(encrypted);
         // console.log(temp);
         // console.log(encrypted);
+
+        //testing
         console.log("ipfsDAta");
         console.log(ipfsData);
-
+console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&");
         const ipfsJson = JSON.parse(ipfsData);
+        console.log(ipfsJson);
 
-        console.log(ipfsJson.signature);
-        const decryptMessage = await EthCrypto.decryptWithPrivateKey(privateKey, JSON.parse(ipfsJson.encryptedData));
-        console.log("decryptMessage =========================================================="+decryptMessage);
+        const decryptDataAdminLayer = await EthCrypto.decryptWithPrivateKey(adminPrivateKey, (ipfsJson));
+        console.log("decryptDataAdminLayer ------------------- "  + (decryptDataAdminLayer) );
+
+        const encryptedData1 = JSON.parse((decryptDataAdminLayer));
+
+        const decryptDataUserLayer = await EthCrypto.decryptWithPrivateKey(privateKeyUser, encryptedData1.encryptedData);
+        console.log("decryptData userLayer ------------------- "  + JSON.stringify(decryptDataUserLayer) );
+
+
+        // const ipfsJsonUserLayer = JSON.parse(decryptDataAdminLayer);
+        // console.log(ipfsJsonUserLayer.signature);
+        // const decryptMessage = await EthCrypto.decryptWithPrivateKey(privateKeyUser, JSON.parse(ipfsJsonUserLayer.encryptedData));
+        // console.log("decryptMessage =========================================================="+decryptMessage);
         // url = "url";
+
+        //commenting this removes header error
         res.send({"success":"Success", "timeStamp":timeStamp,
                   "messageId":messageId, "email":email, "url": url});
     });

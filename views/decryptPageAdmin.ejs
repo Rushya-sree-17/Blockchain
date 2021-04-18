@@ -5,12 +5,15 @@
     <title>Decrypt Page</title>
   </head>
   <body>
+    <p>Decrypt Page at Admin</p>
     <div class="form-group">
       <a id="url"><%= url %></a>
       <form class="" action="/decryptPageAdmin" method="post">
         <input type="password" name="privateKey" id="privateKey" value="" placeholder="Enter Private Key">
         <input type="submit" name="submit" value="submit">
         <input type="url" name="url" value="<%= url%>" hidden>
+        <input type="text" name="uniqueMailId" value="<%= uniqueMailId%>" hidden>
+
         <!-- <button type="button" name="button" onclick="seeContent()">See Mail Content</button> -->
       </form>
     </div>

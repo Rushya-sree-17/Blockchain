@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Validation Page</title>
+  </head>
+  <body>
+    <h1>Validation</h1>
+    <div class="container">
+    <table class="table table-striped">
+      <tr>
+        <td><h4>Status</h4></td>
+        <td><h5><%= success %></h5></td>
+      </tr>
+
+      <tr>
+        <td><h4>Validation</h4></td>
+        <td><h5><%= validation %></h5></td>
+      </tr>
+
+      <tr>
+       <td><h4>Signer</h4></td>
+       <td><h5><%= signer %></h5></td>
+      </tr>
+
+      <tr>
+        <td><h4>Address of signer</h4></td>
+        <td><h5><%= address %></h5></td>
+      </tr>
+
+    </table>
+
+    <h2>Email Content</h2>
+     <table class="table table-striped">
+       <tr>
+        <td><%= decryptMessage %></td>
+       </tr>
+     </table>
+ </div>
+
+  </body>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="./css/main.css">
+
+  <script type="text/javascript">
+    function seeContent() {
+
+    }
+  </script>
+</html>

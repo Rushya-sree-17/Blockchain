@@ -89,9 +89,10 @@
 		</div>
 
 	</div>
+	<!-- <div class="container"> -->
 	<div class="col-md-0 col-md-offset-1">
 	<div style="height:300px; overflow-y: scroll;width:1000px;">
-		<center>
+		<!-- <center> -->
 		<table class="table table-hover text-center" >
 			<tr>
 				<th><center>S.No</center></th>
@@ -106,8 +107,8 @@
 				<tr id="<%=i+1%>">
 					<td><%= i+1 %></td>
 					<!-- <td><%= emailRequestData[i].uniqueMailId %></td> -->
-					<!-- <td><%= emailRequestData[i].messageId %></td> -->
-					<td>hi</td>
+					<td><%= emailRequestData[i].messageId %></td>
+					<!-- <td>hi</td> -->
 					<td><%= emailRequestData[i].userId %></td>
 					<td><%= emailRequestData[i].emailTimeStamp %></td>
 					<td><%= emailRequestData[i].currTimeStamp %></td>
@@ -139,7 +140,7 @@
 				</tr>
 			<% } %>
 			</table>
-		</center>
+		<!-- </center> -->
 		<!-- <span><%= emailRequestData %></span> -->
 	</div>
 </div>

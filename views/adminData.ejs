@@ -95,9 +95,13 @@ var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) 
 																				}
 																				console.log("Email transaction found with hash : " + hash);
 																				console.log(hash);
+																				console.log(msgId);
+																				console.log(unique_mail_id);
 
 																				$.post("/adminData",
 																					 {
+																						 messageId: msgId,
+																						 timeStamp1: timeStamp,
 																						 uniqueMailId : unique_mail_id,
 																						 // emailContent: content,
 																						 emailContent : hash
@@ -106,13 +110,13 @@ var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) 
 																					 {
 																						 if(status === "success")
 																						 {
-																							 console.log("successs hiiiiiiiiiiiii");
+																							 console.log("successs hiiiiiiiiiiiii12333333");
 																						 }
 																						 else
 																						 {
 																							 alert("Status: " + status );
 																						 }
-																						 location.reload();
+																						 // location.reload();
 																					 }
 																			 );
 
@@ -205,8 +209,21 @@ var Courses =  new web3.eth.Contract((contractDetails[0]), (contractDetails[1]) 
 			<td class="row-data"><%= emailRequestData[i].currTimeStamp %></td>
     		<td>
 			<% if(emailRequestData[i].status==="Pending") { %>
-				
-				<button id = "button<%= i+1 %>" onclick="show()">Search</button>
+
+<!-- uncomment for previous -->
+				<!-- <button id = "button<%= i+1 %>" onclick="show()">Search</button> -->
+<!-- hanging -->
+				<div class="form-group">
+					<form  action="/adminData" method="post">
+						<!-- <button id = "button<%= i+1 %>" onclick="showData()">Search</button> -->
+						<!-- <h5 hidden id="content<%=i+1%>" ><%= emailRequestData[i].content %></h5> -->
+						<input type="text" name="messageId" value="<%= emailRequestData[i].messageId %>"  hidden >
+						<input type="text" name="timeStamp" value="<%= emailRequestData[i].emailTimeStamp %>" hidden >
+						<input type="text" name="uniqueMailId" value="<%= emailRequestData[i].uniqueMailId %>"  hidden>
+						<input type="submit" name="submit" value="Send to Jud">
+					</form>
+				</div>
+
 				<!-- <input type="button"  value="submit" onclick="show()" /></td> -->
 			<!-- <a href="/searchMail/<%= emailRequestData[i].uniqueMailId %>">Search</a> -->
 			<%} else{ %>
