@@ -7,7 +7,14 @@
     td {
         text-align: center;
     }*/
+*, html {
+		    margin:0;
+		    padding:0;
+		}
 body{
+	/* margin-top: 0px; */
+	padding: 0px;
+	margin: 0px;
 	text-align: center !important;
 }
 p{
@@ -56,12 +63,63 @@ input {
  margin-bottom: 1em;
 }
 button {
- margin: 2em 0;
+ /* margin: 2em 0; */
  padding: 1em 4em;
  display:block;
 }
+
+.buttons {
+	width: 200px;
+	margin: 0 auto;
+	display: inline;
+}
+
+.action_btn {
+	width: 200px;
+	margin: 0 auto;
+	display: inline;
+}
+
+button_jud {
+	margin: 0em 0;
+	padding: 1em 4em;
+	display:block;
+}
+
 #instructor {
  padding:1em;
  background-color:#fff;
  margin: 1em 0;
+}
+.bg_silver {
+  background-color: #C0C0C0;
+}
+
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #333;
+}
+
+li {
+	float: left;
+}
+
+li a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+li a:hover:not(.active) {
+	background-color: #111;
+}
+
+.active {
+	background-color: #4CAF50;
 }

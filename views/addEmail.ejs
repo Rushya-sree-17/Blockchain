@@ -18,6 +18,12 @@
     <script src="web3.min.js"></script>
   </head>
   <body>
+    <ul>
+      <li><a href="/">Email Arbitration Service Provider</a></li>
+      <!-- <li style="float:right"></li> -->
+      <li style="float:right"><a class="active" href="/logout">Log Out</a></li>
+    </ul>
+    <br>
     <!-- <form class="" action="/" method="post"> -->
       <!-- <input type="file" id="fileUpload" /> -->
     <!-- </form> -->
@@ -133,7 +139,7 @@ $.ajax({
                  console.log(timeStamp);
                  console.log(email);
                  console.log("updated");
-                 // location.reload();
+                 location.reload();
                }
                else
                {

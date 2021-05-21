@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-  <title>Bootstrap Example</title>
+  <title>Validation Page</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -10,17 +10,30 @@
     <title>Validation Page</title>
   </head>
   <body>
+    <ul>
+  		<li><a href="/">Email Arbitration Service Provider</a></li>
+  		<!-- <li style="float:right"></li> -->
+  		<li style="float:right"><a class="active" href="/logout">Log Out</a></li>
+  	</ul>
+    <br>
+    <!-- <div class="col-md-6 col-md-offset-5"> -->
+
+
+  	<!-- <div styl  -->
+  <!-- </div> -->
+
     <h1>Validation</h1>
     <div class="container">
     <table class="table table-striped">
-      <tr>
+      <!-- <tr>
         <td><h4>Status</h4></td>
         <td><h5><%= success %></h5></td>
-      </tr>
+      </tr> -->
 
       <tr>
-        <td><h4>Validation</h4></td>
-        <td><h5><%= validation %></h5></td>
+        <td><h4>signature</h4></td>
+        <td><div style="height:40px; width:400px;  word-wrap:break-word;"><h5><%= signature %></h5></div></td>
+        <!-- <td></td> -->
       </tr>
 
       <tr>
@@ -29,8 +42,14 @@
       </tr>
 
       <tr>
-        <td><h4>Address of signer</h4></td>
-        <td><h5><%= address %></h5></td>
+       <td><h4>Owner of private key</h4></td>
+       <td><h5><%= addressOfPrivateKey %></h5></td>
+      </tr>
+
+
+      <tr>
+        <td><h4>Validation</h4></td>
+        <td><h5><%= validation %></h5></td>
       </tr>
 
     </table>
@@ -38,7 +57,13 @@
     <h2>Email Content</h2>
      <table class="table table-striped">
        <tr>
-        <td><%= decryptMessage %></td>
+        <td>
+          <!-- <p><%= decryptMessage %></p> -->
+          <% for(var i=0; i < decryptMessage.length; i++) { %>
+            <h5 align="left"><%= decryptMessage[i] %></h5>
+            <!-- <br> -->
+         <% } %>
+        </td>
        </tr>
      </table>
  </div>

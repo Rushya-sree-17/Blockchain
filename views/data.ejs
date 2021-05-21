@@ -1,7 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+	<style>
+	ul {
+	  list-style-type: none;
+	  margin: 0;
+	  padding: 0;
+	  overflow: hidden;
+	  background-color: #333;
+	}
+
+	li {
+	  float: left;
+	}
+
+	li a {
+	  display: block;
+	  color: white;
+	  text-align: center;
+	  padding: 14px 16px;
+	  text-decoration: none;
+	}
+
+	li a:hover:not(.active) {
+	  background-color: #111;
+	}
+
+	.active {
+	  background-color: #4CAF50;
+	}
+	</style>
+<!-- page breaking inside table -->
+	<style type="text/css">
+	    table { page-break-inside:auto }
+	    tr    { page-break-inside:avoid; page-break-after:auto }
+	    thead { display:table-header-group }
+	    tfoot { display:table-footer-group }
+	</style>
+
 	<title>Welcome</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
 	</script>
@@ -9,33 +55,89 @@
 	<link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-	<div class="col-md-6 col-md-offset-5">
-	<div style='float: right;' >
-		<a href="/logout">Logout</a>
-	</div>
-</div>
+
+	<ul>
+	  <li><a href="/">Email Arbitration Service </a></li>
+	  <li style="float:right"><a class="active" href="/logout">Log Out</a></li>
+	</ul>
+
+		<!-- <nav class="navbar navbar-dark bg-secondary">
+			<h3 class = "navbar-text"> Service Provider </h3>
+					 <a class="navbar-item"  href="/logout" class="btn btn-primary">
+						 log out
+				 </a>
+			 </nav> -->
+
+
+<!-- <nav class="navbar navbar-expand-sm bg-dark">
+	<ul class="navbar-nav">
+    <li class="nav-item">
+      <h3 >asd</h3>
+    </li>
+    <li class="nav-item">
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/logout">Log Out</a>
+    </li>
+  </ul>
+</nav> -->
+
+
+
+<!-- <nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-end"> -->
+<!-- <a class="navbar-brand" href="\">Home</a> -->
+<!-- <span class="navbar-text">
+	Navbar
+</span> -->
+<!-- <button class="btn btn-success ml-auto mr-2">logout</button> -->
+	<!-- <div> -->
+
+	<!-- </div> -->
+			<!-- <div class="col-md-7 col-md-offset-5"> -->
+		  <!-- <ul class="navbar-nav navbar-right">
+		    <li class="nav-item">
+		      <a class="nav-link" href="#">Link</a>
+		    </li>
+		  </ul> -->
+			<!-- </div> -->
+
+<!-- </nav> -->
+
+<!--
+	<div class="topnav">
+		<div class="col-md-7 col-md-offset-5">
+			<div style='float: right;' >
+				<a href="/logout" class="btn btn-primary">Logout</a>
+			</div>
+		</div>
+  </div> -->
+
+	<!-- <div style='float: right;' >
+		<a href="/logout" class="btn btn-primary">Logout</a>
+	</div> -->
+
 	<div class="col-md-4 col-md-offset-4">
 		<div>
 			<p>Profile Detail</p>
 		</div>
-		<div>
+		<div class="container">
 			<center>
 				<table class="table table-hover text-center">
-					<tr><td>Name </td><td><%= name %></td></tr>
-					<tr><td>Email </td><td><%= email %></td></tr>
+				<!-- <table class="table table-bordered"> -->
+					<tr><td>Name</td><td><%= name %></td></tr>
+					<tr><td>Email</td><td><%= email %></td></tr>
 				</table>
 			</center>
-			<br>
-			<br>
-			<br>
+
 
 			<div class="findMyEmail">
-				<p><a href="/findMyEmail"><h2>Find my email</h2></a></p>
-				<div class="addEmail">
-					<a href="/addEmail">Add Email</a>
-				</div>
+				<a href="/findMyEmail" class="btn btn-primary" >
+					<h3>
+						Find my email
+				</h3>
+			</a>
 			<br>
-			<br>
+
 			</div>
 
 			<div>
@@ -47,12 +149,12 @@
 		</div>
 
 	</div>
-	<div class="col-md-0 col-md-offset-2">
-	<div style="height:200px; overflow-y: scroll;width:800px;">
+	<div class="col-md-0 col-md-offset-0">
+	<div style="height:500px; overflow-y: scroll;width:1300px;">
 		<center>
-		<table class="table table-hover text-center" >
-			<tr>
-				<th><center>S.No</center></th>
+		<table class="table table-bordered" >
+			<tr class="bg_silver">
+				<th ><center>S.No</center></th>
 				<th><center>Message Id</center></th>
 				<th><center>Email Time Stamp</center></th>
 				<th><center>Judiciary</center></th>
@@ -74,6 +176,10 @@
 		</center>
 		<!-- <span><%= emailRequestData %></span> -->
 	</div>
+</div>
+
+<div class="addEmail">
+	<a href="/addEmail">Add Email</a>
 </div>
 
 </body>
