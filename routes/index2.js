@@ -49,23 +49,9 @@ var storage	=	multer.diskStorage({
 var upload = multer({ storage : storage }).array('userPic');
 
 const ipfsAPI = require('ipfs-api');
-const ipfs = ipfsAPI('ipfs.infura.io', '5001', {protocol: 'https'});   
-// ipfsAPI('localhost', 5001);
-
-// ipfsAPI('ipfs.infura.io', '5001', {protocol: 'https'});
-
-// ipfsAPI('localhost', 5001);
+const ipfs =  ipfsAPI('localhost', 5001);
 // ipfsAPI('ipfs.infura.io', '5001', {protocol: 'https'})
 
-// const IPFS = require('ipfs-mini' 1.1.5 );
-// const ipfs = new IPFS({host: 'ipfs.infura.io', port: 5001, protocol: 'https'});
-// const data = "Writing a test message on the network";
-// ipfs.add(data, (err, hash) => {
-//     if(err){
-//         return console.log(err);
-//     }
-//     console.log('https://ipfs.infura.io/ipfs/'+hash);
-// })
 
 
 var randToken = require('rand-token');
@@ -170,19 +156,6 @@ router.post('/decryptPageAdmin', async function (req, res, next){
     var adminPrivateKey = req.body.privateKey;
     var url = req.body.url;
 
-if(url == "Invalid Email Request")
-{
-  var statusToBeUpdated1 = "Invalid Email Request";
-  EmailRequest.updateOne({"uniqueMailId" : emailUniqueId},{"status" : statusToBeUpdated1,"content":statusToBeUpdated1},function(err){
-    if(err){
-      console.log(err);
-    }else{
-      console.log("Success");
-      res.redirect("/profile");
-      // res.send("success");
-    }
-  });
-}
       const publicKey = await EthCrypto.publicKeyByPrivateKey(adminPrivateKey);
 
       var ipfsData = "";
@@ -225,7 +198,7 @@ if(url == "Invalid Email Request")
           hash = result[0].hash;
           console.log(result[0].hash);
           //in judiciary
-            var url =  'https://ipfs.infura.io/ipfs/'+hash;
+            var url =  'https://ipfs.io/ipfs/'+hash;
             console.log(url);
 
 
@@ -328,6 +301,7 @@ else
 
 
 var Courses =  new web3.eth.Contract(
+
   [
   	{
   		"constant": false,
@@ -463,9 +437,9 @@ var Courses =  new web3.eth.Contract(
   	}
   ]
 
-,   "0x67eb9a05Efe3cE7e80C7268E7fee00A0e9d1061b" ); // smart contract address
+,   "0x573aACBc004747622cb988504e99E8B5A2cE3eC7" ); // smart contract address
 
-var hash = "Invalid Email Request";
+var hash = "not set";
 console.log("Msg id : " + msgId + " ||||| timeStamp : " + timeStamp);
 
 var accounts = await web3.eth.getAccounts(async (error,result) => {
@@ -513,10 +487,10 @@ var accounts = await web3.eth.getAccounts(async (error,result) => {
 
                                                       // break;
                                                       console.log(i + " * " + counts);
-                                                      // if(i == counts )
-                                                      // {
+                                                      if(i == counts )
+                                                      {
                                                         console.log("hiiiiii " + i);
-                                                          if(flag == 0)
+                                                          if(flag === 0)
                                                           {
                                                             hash = "Invalid request";
                                                             console.log("not  found");
@@ -525,8 +499,7 @@ var accounts = await web3.eth.getAccounts(async (error,result) => {
                                                           console.log(hash);
                                                           console.log(msgId);
                                                           res.render('decryptPageAdmin.ejs', {url:hash, uniqueMailId:uniqueMailId});
-                                                          // break;
-                                                      // }
+                                                      }
                                                  }
                                                }
                                                else
@@ -534,28 +507,6 @@ var accounts = await web3.eth.getAccounts(async (error,result) => {
                                            });//get method
                                            // console.log(i + " - " + flag);
                                        }
-
-                                       // if(flag == 0)
-                                       // {
-                                       //   console.log("Invalid credentials : " + hash );
-                                       //   console.log(hash);
-                                       //   console.log(msgId);
-                                       //
-                                       //
-                                       //     // var statusToBeUpdated1 = "Invalid Email Request";
-                                       //     //
-                                       //     // EmailRequest.updateOne({"uniqueMailId" : uniqueMailId},{"status" : statusToBeUpdated1,"content":statusToBeUpdated1},function(err){
-                                       //     //   if(err){
-                                       //     //     console.log(err);
-                                       //     //   }else{
-                                       //     //     console.log("Success");
-                                       //     //     res.redirect("/profile");
-                                       //     //     // res.send("success");
-                                       //     //   }
-                                       //     // });
-                                       //
-                                       //   res.render('decryptPageAdmin.ejs', {url:hash, uniqueMailId:uniqueMailId});
-                                       // }
                                      }
                                      // else
                                      //  {console.log(err);}
@@ -784,7 +735,7 @@ console.log("hiii");
      var len = string123.length;
   console.log("length " + string123.length);
   res.render("validationPage.ejs",{"success":"success", "decryptMessage":string123,
-                "signer":signer, "signature":ipfsJson.signature, "validation":validation, "addressOfPrivateKey":address});
+                "signer":signer, "address":ipfsJson.signature, "validation":validation});
 
 })
 
@@ -908,7 +859,7 @@ router.post('/addEmail', async function(req,res,next)
 
 
 
-  const notworking = "notworking123456";
+  const notworking = "notworking";
   const myBuffer = Buffer.from(notworking, "utf-8");
 
   ipfs.files.add(myBuffer, await function (err, result) {
@@ -1032,7 +983,7 @@ console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         hash = result[0].hash;
         console.log(result[0].hash);
         //in judiciary
-          var url =  'https://ipfs.infura.io/ipfs/'+hash;
+          var url =  'https://ipfs.io/ipfs/'+hash;
           console.log(url);
           var ipfsData = "";
           let qwe = await fetch(url)

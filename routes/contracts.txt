@@ -33,21 +33,6 @@
 	},
 	{
 		"constant": true,
-		"inputs": [],
-		"name": "getEmailTransactionCount",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -137,5 +122,5 @@
 
   ,
 
-    "0x67eb9a05Efe3cE7e80C7268E7fee00A0e9d1061b"
+    "0x9Ed9bCd1190C8e147261F79432B4dfFA45838ee1"
  ]

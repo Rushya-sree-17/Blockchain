@@ -5,12 +5,25 @@
     <title>Decrypt Page</title>
   </head>
   <body>
+
+    <ul>
+  		<li><a href="/">Email Arbitration Service Provider</a></li>
+  		<!-- <li style="float:right"></li> -->
+  		<li style="float:right"><a class="active" href="/logout">Log Out</a></li>
+  	</ul>
+    <br>
+
+    <p>Decrypt Page at Admin</p>
     <div class="form-group">
-      <a id="url"><%= url %></a>
+      <h4>Encrypted Email Data : <a id="url"><%= url %></a> </h4>
+      <br>
+      <!-- <a id="url"><%= url %></a> -->
       <form class="" action="/decryptPageAdmin" method="post">
         <input type="password" name="privateKey" id="privateKey" value="" placeholder="Enter Private Key">
         <input type="submit" name="submit" value="submit">
         <input type="url" name="url" value="<%= url%>" hidden>
+        <input type="text" name="uniqueMailId" value="<%= uniqueMailId%>" hidden>
+
         <!-- <button type="button" name="button" onclick="seeContent()">See Mail Content</button> -->
       </form>
     </div>

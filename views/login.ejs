@@ -2,6 +2,40 @@
 <html>
 <head>
 	<title>Login</title>
+	<!-- <link rel="stylesheet"
+				 href=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
+
+<style>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #4CAF50;
+}
+</style>
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
 	</script>
@@ -39,7 +73,7 @@
          					};
          			},
          				error: function() {
-						 
+
 						}
          			})
 			});
@@ -48,6 +82,22 @@
 	</script>
 </head>
 <body>
+
+
+<ul>
+  <li><a href="/">Email Arbitration Service</a></li>
+  <!-- <li style="float:right"><a class="active" href="/logout">Log Out</a></li> -->
+</ul>
+
+
+	<!-- <nav class="navbar navbar-dark bg-secondary">
+		<h3 class = "navbar-text"> Service Provider </h3>
+				 <a class="navbar-brand" href="#">
+					 Secondary color background
+			 </a>
+		 </nav> -->
+
+
 	<div class="col-md-4 col-md-offset-4">
 		<div>
 			<p>Login</p>
@@ -67,12 +117,12 @@
 			<a href="/profile" id="adminType"></a>
 			<a href="/profile" id="judiciaryType"></a>
 		</div>
-		
+
 		<div><span>Forgot password?</span><a href="/forgetpass">Click here</a>
 		<div><span>Create a new Account?</span><a href="/">Register here</a>
 
 		</div>
-		
+
 	</div>
 </body>
 </html>
