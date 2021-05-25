@@ -1,4 +1,7 @@
-# Email Validation and Arbitration Framework and Platform Based on Blockchain
+# Email Validation and Arbitration Framework, Platform Based on Blockchain
+
+This project is carried out as a part of Bachelor Dissertation Project, BTech in Computer Science and Engineering, IIT Indore from Jan 2021 to May 2021. This project is a joint work between Atche Sravya, B Rushya Sree Reddy and our project guide Dr. Gourinath banda.
+
 
 Steps to follow to set up a local environment and run the application :
 
