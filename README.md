@@ -13,7 +13,7 @@ Step 2 : Run npm install to install all the required node module.
 Step 3 : Database setup, 
 In index.js file :
  
-var db_link = "mongodb+srv://<username>:<password>@cluster0.xkioe.mongodb.net/Project-0?retryWrites=true&w=majority";
+var db_link = "mongodb+srv://USERNAME:PASSWORD@cluster0.xkioe.mongodb.net/Project-0?retryWrites=true&w=majority";
 
 Use your mongoDb credentials in the above link.
 
