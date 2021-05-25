@@ -11,6 +11,7 @@ Git repository - https://github.com/Rushya-sree-17/Blockchain
 Step 2 : Run npm install to install all the required node module.
 
 Step 3 : Database setup, 
+
 In index.js file :
  
 var db_link = "mongodb+srv://USERNAME:PASSWORD@cluster0.xkioe.mongodb.net/Project-0?retryWrites=true&w=majority";
@@ -20,18 +21,24 @@ Use your mongoDb credentials in the above link.
 Step 5 : Blockchain
 
 Install Ganache - https://www.trufflesuite.com/ganache
+
 Open Ganache app 
+
 Or
+
 Run command : ganache-cli
+
 Make sure to use same ganache port while setting web3
+
 (ex : 	web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545")); )
 
 Step 6 :Remix ide 
 
 Copy Smart contracts code into Remix IDE
+
 Go to Deploy & Run Transactions section and change the environment to Web3 Provider and set the port on which Ganache is running.
-Compile the contract and copy the ABI code that is generated
-Deploy the contract in the Run & Deploy section and save the contract address.
+
+Compile the contract and copy the ABI code that is generated, Deploy the contract in the Run & Deploy section and save the contract address.
 Paste these ABI code and contract address in contracts.txt file in JSON format and also in index.js file.
 
 To run the server use nodemon server.js
